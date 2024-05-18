@@ -13,7 +13,11 @@ node_modules/
 /.next/
 .next/
 /out/
-
+/.parcel-cache/
+.parcel-cache/
+/uploads/
+uploads/
+/uploads
 # production
 /build
 

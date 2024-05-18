@@ -11,18 +11,23 @@ async function DomainAnalyze(req, res) {
   const allDomains = [];
   const allWords = [];
   console.time("domain");
+
   fs.readFile(`${req.file.path}`, "utf-8", async (err, domains) => {
     err && console.log(err);
+
     await WordsNinja.loadDictionary();
 
-    domains.split("\r\n").map((x) => {
+    domains.split("\n").map((x) => {
+      // console.log(x.replace(/\d+/g, "").toLowerCase().split("."));
+
       const words = WordsNinja.splitSentence(
-        x.replace(/\d+/g, "").split(".")[0],
+        x.replace(/\d+/g, "").split(".")[0], // remove domains that contain numbers
         {
           capitalizeFirstLetter: true,
         },
       );
       ///[0-9]/.test(x.split(".")[0]) ? "" :
+      // console.log(words);
       allWords.push(words);
       allDomains.push({
         domain: x,
