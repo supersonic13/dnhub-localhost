@@ -1,6 +1,8 @@
 "use strict";
+import { words } from "./words.js";
 const splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
-const FILE_WORDS = require("./words");
+// const FILE_WORDS = require("./words");
+
 let maxWordLen = 0;
 let wordCost = {};
 let maxCost = 9e999;
@@ -19,7 +21,7 @@ class WordsNinja {
       //   fs.readFile(FILE_WORDS, "utf8", function (err, data) {
       //     if (err) throw err;
 
-      let words = FILE_WORDS.split("\n");
+      let words = { words }.split("\n");
 
       words.forEach(function (word, index) {
         wordCost[word] = Math.log((index + 1) * Math.log(words.length));
@@ -41,7 +43,7 @@ class WordsNinja {
    */
   splitSentence(
     string,
-    { camelCaseSplitter, capitalizeFirstLetter, joinWords } = {}
+    { camelCaseSplitter, capitalizeFirstLetter, joinWords } = {},
   ) {
     let list = [];
     let that = this;
@@ -170,4 +172,4 @@ class WordsNinja {
   }
 }
 
-module.exports = WordsNinja;
+export default WordsNinja;

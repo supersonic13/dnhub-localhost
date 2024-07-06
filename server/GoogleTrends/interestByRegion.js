@@ -1,5 +1,5 @@
-const googleTrends = require("google-trends-api");
-
+// const googleTrends = require("google-trends-api");
+import googleTrends from "google-trends-api";
 async function InterestByRegion(socket, interestOverTimeInput1) {
   googleTrends
     .interestByRegion({
@@ -19,4 +19,4 @@ async function InterestByRegion(socket, interestOverTimeInput1) {
     });
 }
 
-module.exports = InterestByRegion;
+export default InterestByRegion;

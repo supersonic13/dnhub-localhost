@@ -1,5 +1,6 @@
-const { MongoClient } = require("mongodb");
-
+// const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
+import { server } from "./app.js";
 // Load environment variables from .env file
 const port = process.env.PORT || 4000;
 
@@ -32,7 +33,7 @@ const connectToMongoDB = async () => {
 const startServer = async () => {
   await connectToMongoDB(); // Ensure MongoDB is connected before starting the server
 
-  const server = require("./app"); // Import the app after MongoDB connection
+  // const server = require("./app"); // Import the app after MongoDB connection
   server.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
@@ -40,4 +41,4 @@ const startServer = async () => {
 
 startServer(); // Start the server
 
-module.exports = client; // Export the MongoClient instance for use in other parts of your app
+export default client; // Export the MongoClient instance for use in other parts of your app

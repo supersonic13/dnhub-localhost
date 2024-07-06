@@ -1,6 +1,7 @@
-const axios = require("axios");
-const WhoisLight = require("whois-light");
-
+// const axios = require("axios");
+// const WhoisLight = require("whois-light");
+import axios from "axios";
+import WhoisLight from "whois-light";
 const placeholderPatterns = [
   "This Domain is For Sale",
   "Make an Offer",
@@ -66,15 +67,15 @@ async function DevelopedSiteChecker(socket, domain) {
         }
         arr.map((x) => (obj[x[0]] = x[1]));
         return obj;
-        console.log(obj);
+        // console.log(obj);
         // respond.json(obj);
       } else {
-        console.log(res);
+        // console.log(res);
         return res;
 
         // respond.json(res);
       }
-    },
+    }
   );
   try {
     // WHo is lookup
@@ -90,7 +91,7 @@ async function DevelopedSiteChecker(socket, domain) {
       const content = response.data?.toLowerCase();
 
       const isPlaceHolder = placeholderPatterns.some((x) =>
-        content.includes(x),
+        content.includes(x)
       );
       if (isPlaceHolder) {
         // Domain Not Developed
@@ -133,4 +134,4 @@ async function DevelopedSiteChecker(socket, domain) {
   }
 }
 
-module.exports = DevelopedSiteChecker;
+export default DevelopedSiteChecker;

@@ -1,4 +1,4 @@
-module.exports = `the
+export const words = `the
 of
 in
 a

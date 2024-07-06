@@ -1,4 +1,5 @@
-const googleTrends = require("google-trends-api");
+// const googleTrends = require("google-trends-api");
+import googleTrends from "google-trends-api";
 
 async function InterestOverTime_3(socket, interestOverTimeInput3) {
   googleTrends
@@ -18,4 +19,4 @@ async function InterestOverTime_3(socket, interestOverTimeInput3) {
     });
 }
 
-module.exports = InterestOverTime_3;
+export default InterestOverTime_3;

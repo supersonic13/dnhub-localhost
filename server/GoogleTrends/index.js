@@ -1,4 +1,5 @@
-const googleTrends = require("google-trends-api");
+// const googleTrends = require("google-trends-api");
+import googleTrends from "google-trends-api";
 
 async function GoogleTrends(socket, data) {
   googleTrends
@@ -18,4 +19,4 @@ async function GoogleTrends(socket, data) {
     });
 }
 
-module.exports = GoogleTrends;
+export default GoogleTrends;

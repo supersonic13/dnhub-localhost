@@ -1,8 +1,15 @@
-const WordsNinjaPack = require("./lib/wordsNinja");
+// const WordsNinjaPack = require("./lib/wordsNinja");
+// const WordsNinja = new WordsNinjaPack();
+// const fs = require("fs");
+// const winkNLP = require("wink-nlp");
+// const model = require("wink-eng-lite-web-model");
+import WordsNinjaPack from "./lib/wordsNinja.js";
+import fs from "fs";
+import winkNLP from "wink-nlp";
+import model from "wink-eng-lite-web-model";
+
 const WordsNinja = new WordsNinjaPack();
-const fs = require("fs");
-const winkNLP = require("wink-nlp");
-const model = require("wink-eng-lite-web-model");
+
 const nlp = winkNLP(model);
 const its = nlp.its;
 const as = nlp.as;
@@ -33,4 +40,4 @@ async function TldBasedWords(socket, tld) {
   socket.emit("tld-based-words", { pattern });
 }
 
-module.exports = TldBasedWords;
+export default TldBasedWords;
