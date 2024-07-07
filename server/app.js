@@ -30,6 +30,7 @@ import NewsContent from "./NewsTrends/NewsContent.js";
 import { Server } from "socket.io";
 import SaveKanban from "./Kanban/SaveKanban.js";
 import GetKanban from "./Kanban/GetKanban.js";
+import BulkDomainVolume from "./BulkDomainVolume/index.js";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./uploads/");
@@ -128,8 +129,12 @@ io.on("connection", (socket) => {
   socket.on("save-kanban", (data) => {
     SaveKanban(socket, data);
   });
+
   socket.on("get-kanban-data", (data) => {
     GetKanban(socket, data);
+  });
+  socket.on("bulk-domain-volume", (domain) => {
+    BulkDomainVolume(socket, domain);
   });
   socket.on("disconnect", () => {
     console.log("disconnected", socket.id);
