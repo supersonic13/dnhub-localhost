@@ -1,16 +1,16 @@
-// const googleTrends = require("google-trends-api");
-import googleTrends from "google-trends-api";
-async function InterestOverTime_1(socket, interestOverTimeInput1) {
+const googleTrends = require("google-trends-api");
+// import googleTrends from "google-trends-api";
+
+async function InterestOverTime_4(socket, interestOverTimeInput4) {
   googleTrends
     .interestOverTime({
-      keyword: interestOverTimeInput1,
+      keyword: interestOverTimeInput4,
       startTime: new Date("2023-01-01"),
       endTime: new Date("2024-01-01"),
     })
     .then((results) => {
-      console.log(results);
       socket.emit(
-        "interest-over-time-1",
+        "interest-over-time-4",
         JSON.parse(results)?.default?.timelineData
       );
     })
@@ -19,4 +19,4 @@ async function InterestOverTime_1(socket, interestOverTimeInput1) {
     });
 }
 
-export default InterestOverTime_1;
+module.exports = InterestOverTime_4;

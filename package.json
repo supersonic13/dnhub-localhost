@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "soap": "^1.1.4",
+    "wink-eng-lite-web-model": "^1.8.0",
+    "wink-nlp": "^2.3.0",
+    "xml2js": "^0.6.2"
+  }
+}

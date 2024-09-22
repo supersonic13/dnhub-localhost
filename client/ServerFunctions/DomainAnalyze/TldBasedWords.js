@@ -40,4 +40,4 @@ async function TldBasedWords(socket, tld) {
   socket.emit("tld-based-words", { pattern });
 }
 
-export default TldBasedWords;
+module.exports = TldBasedWords;
