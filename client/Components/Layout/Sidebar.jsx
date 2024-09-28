@@ -106,7 +106,7 @@ export default function Sidebar() {
                       <rect width={20} height={14} x={2} y={7} rx={2} ry={2} />
                       <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
-                    Projects
+                    API
                     <svg
                       className="hs-accordion-active:block ms-auto hidden size-4"
                       xmlns="http://www.w3.org/2000/svg"
@@ -146,26 +146,50 @@ export default function Sidebar() {
                       <li>
                         <Link
                           className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                          href="/demo"
+                          href="/sedo-api"
                         >
-                          Demo
+                          Sedo
                         </Link>
                       </li>
                       <li>
                         <Link
                           className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                          href="/settings"
+                          href="/godaddy-api"
                         >
-                          Settings
+                          Godaddy
                         </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                          href="#"
+                          href="/namecheap-api"
                         >
-                          Link 3
-                        </a>
+                          NameCheap
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                          href="/namesilo-api"
+                        >
+                          Namesilo
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                          href="/dynadot-api"
+                        >
+                          Dynadot
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                          href="/open-ai-api"
+                        >
+                          Open Ai
+                        </Link>
                       </li>
                     </ul>
                   </div>

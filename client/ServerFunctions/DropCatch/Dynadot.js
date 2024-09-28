@@ -1,15 +1,20 @@
 const WhoisLight = require("whois-light");
 const axios = require("axios");
-const xml2js = require("xml2js");
-const parser = new xml2js.Parser();
-function DynadotDropCatch(socket, data) {
+const { client } = require("../../db");
+
+async function DynadotDropCatch(socket, data) {
   // console.time("drop-catch");
+  // 9F8y639W7M6P8l7chFy8sLy6y7f7CE9G8AY9UQE
   const { domains } = data;
   try {
+    const api = await client
+      .db("localhost-server")
+      .collection("dynadot-api")
+      .findOne({});
     for (const domain of domains) {
       axios
         .get(
-          `https://api.dynadot.com/api3.json?key=9F8y639W7M6P8l7chFy8sLy6y7f7CE9G8AY9UQE&command=register&domain=${domain}&duration=1&currency=USD`
+          `https://api.dynadot.com/api3.json?key=${api?.api}&command=register&domain=${domain}&duration=1&currency=USD`
         )
         .then((res) => {
           socket.emit("dynadot-catched", {

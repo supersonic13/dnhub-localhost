@@ -3,9 +3,9 @@
   "version": "1.0",
   "private": true,
   "scripts": {
-    "dev": "node start.js",
+    "dev": "nodemon start.js",
     "build": "next build",
-    "start": "NODE_ENV=production node start.js",
+    "start": "NODE_ENV=production nodemon start.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "cheerio": "^1.0.0-rc.12",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
+    "dns2": "^2.1.0",
     "express": "^4.18.2",
     "framer-motion": "^11.5.4",
     "google-trends-api": "^4.9.2",
@@ -22,15 +23,18 @@
     "multer": "^1.4.5-lts.1",
     "next": "^14.1.0",
     "next-themes": "0.2.1",
+    "nodemailer": "^6.9.15",
     "preline": "^1.9.0",
     "react": "18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-redux": "^8.1.2",
+    "soap": "^1.1.4",
     "socket.io": "^4.7.5",
     "uuid": "^9.0.1",
-    "whois-light": "^1.1.7"
+    "whois-light": "^1.1.7",
+    "wordpos": "^2.1.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.9",

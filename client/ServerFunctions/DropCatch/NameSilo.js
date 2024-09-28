@@ -1,16 +1,19 @@
 const WhoisLight = require("whois-light");
 const axios = require("axios");
-const xml2js = require("xml2js");
-const parser = new xml2js.Parser();
-function NameSiloDropCatch(socket, data) {
+const { client } = require("../../db");
+
+async function NameSiloDropCatch(socket, data) {
   // console.time("drop-catch");
   const { domains } = data;
   try {
+    const api = await client
+      .db("localhost-server")
+      .collection("namesilo-api")
+      .findOne({});
     for (const domain of domains) {
       axios
         .get(
-          `
-          https://www.namesilo.com/api/registerDomain?version=1&type=json&key=ea7a02c6f07e6c2d36fa14c&domain=${domain}&years=1&private=1&auto_renew=1`
+          `https://www.namesilo.com/api/registerDomain?version=1&type=json&key=${api?.api}&domain=${domain}&years=1&private=1&auto_renew=0`
         )
         .then((res) => {
           socket.emit("namesilo-catched", {

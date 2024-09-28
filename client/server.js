@@ -19,6 +19,15 @@ const DynadotDropCatch = require("./ServerFunctions/DropCatch/Dynadot");
 const GodaddyDropCatch = require("./ServerFunctions/DropCatch/Godaddy");
 const NameSiloDropCatch = require("./ServerFunctions/DropCatch/NameSilo");
 const TldBasedWords = require("./ServerFunctions/DomainAnalyze/TldBasedWords");
+const PriceMonitoringInterval = require("./ServerFunctions/DomainMonitoring/PriceMonitoringInterval");
+const DnsMonitoringInterval = require("./ServerFunctions/DomainMonitoring/DnsMonitoringInterval");
+const AvailableMonitoringInterval = require("./ServerFunctions/DomainMonitoring/AvailableMonitoringInterval");
+const StatusMonitoringInterval = require("./ServerFunctions/DomainMonitoring/StatusMonitoringInterval");
+const BulkWhois = require("./ServerFunctions/BulkWhois");
+const {
+  default: BulkDomainVolume,
+} = require("./ServerFunctions/BulkDomainVolume");
+const RandomWordsAdvance = require("./ServerFunctions/RandomWordAdvance");
 
 const createServer = async () => {
   await app.prepare();
@@ -45,11 +54,25 @@ const createServer = async () => {
       parameterLimit: 50000000,
     })
   );
+
+  /* ------Price Monitoring Function---------*/
+  // PriceMonitoringInterval();
+  /* ------Price Monitoring Function---------*/
+
+  /* ------Dns Monitoring Function---------*/
+  // DnsMonitoringInterval();
+  /* ------Dns Monitoring Function---------*/
+
+  /* ------Dns Monitoring Function---------*/
+  // AvailableMonitoringInterval();
+  /* ------Dns Monitoring Function---------*/
+
+  /* ------Dns Monitoring Function---------*/
+  // StatusMonitoringInterval();
+  /* ------Dns Monitoring Function---------*/
+
   io.on("connection", (socket) => {
     console.log("A user connected", socket.id);
-    socket.on("developed-site-checker", ({ domain }) => {
-      DevelopedSiteChecker(socket, domain);
-    });
 
     socket.on("tld-based-words", (tld) => {
       TldBasedWords(socket, tld);
@@ -70,7 +93,7 @@ const createServer = async () => {
     socket.on("bulk-domain-volume", (domain) => {
       BulkDomainVolume(socket, domain);
     });
-
+    socket.on("bulk-whois", ({ domain }) => BulkWhois(socket, domain));
     socket.on("namecheap-dropcatch", (domain) =>
       NameCheapDropCatch(socket, domain)
     );
@@ -83,9 +106,14 @@ const createServer = async () => {
     socket.on("godaddy-dropcatch", (domain) =>
       GodaddyDropCatch(socket, domain)
     );
-
+    socket.on("developed-site-checker", ({ domain }) => {
+      DevelopedSiteChecker(socket, domain);
+    });
     socket.on("disconnect", () => {
       console.log("A user disconnected");
+    });
+    socket.on("random-words-advance", ({ words, ext }) => {
+      RandomWordsAdvance({ words, ext }, socket);
     });
   });
 

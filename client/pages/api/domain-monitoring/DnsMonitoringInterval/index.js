@@ -1,12 +1,7 @@
-const client = require("../../db");
-const axios = require("axios");
-const soap = require("soap");
+import fetchDomains from "./fetchDomains";
+import processDomains from "./processDomains";
 
-const fetchDomains = require("./fetchDomains");
-const processDomains = require("./processDomains");
-const sedoUrl = "https://api.sedo.com/api/v1/?wsdl";
-
-async function DnsMonitoringInterval() {
+export default async function DnsMonitoringInterval() {
   async function runInterval() {
     const domains = await fetchDomains();
 
@@ -19,5 +14,3 @@ async function DnsMonitoringInterval() {
   // Start the interval
   setTimeout(runInterval, 10000);
 }
-
-module.exports = DnsMonitoringInterval;

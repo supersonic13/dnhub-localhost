@@ -6,7 +6,7 @@ export default async function BulkDomainVolume(socket, domains) {
   // const keywords = name?.split(".")[0];
 
   const accessToken =
-    "ya29.a0AcM612yrAArOL5-FucZM19l1FUeN75MOp3F8VrZ8dljurIiHxoQJzIDWs7zpTtj5WOBoPfx8ZyXqy0z-_jbkRt8N71Vop-Q2EzC95On4XvTZSp41nT8DoBAHYlbX6IGEYEfdZF8CPnNZfzFdiE4aaLHa6HP_Cq7jplwqGBwaCgYKAcsSAQ8SFQHGX2MiIxomPhqrcsUFhOKbmfIgLw0174";
+    "ya29.a0AcM612xgsjV-x5rsav4H70MVMXcQBrM7vKE1k4Sl6-kXv9s1pLFSKVLIK1NyHpmllMikDkJX_W7ohuY7uINvGwUkAmbj0kpZt_nlP-MDXM_KG6FYNh1DKMTKqvlrKt_dnHmVxwQU_aA_wGvfQ6pYG-SFkpHPnBho62acXlSzkF8aCgYKAZsSARASFQHGX2MiyhZsxLyZMAI-5s2BAHMeqg0178";
   const apiUrl = `https://googleads.googleapis.com/v17/customers/9165971495:generateKeywordHistoricalMetrics`;
 
   const allWords = [];
@@ -44,14 +44,14 @@ export default async function BulkDomainVolume(socket, domains) {
             "developer-token": "Wdmer3gPaI2ZZaSuidrdeQ",
             "Content-Type": "application/json",
           },
-        },
+        }
       )
       .then((res) => res?.data);
     // console.log(domains);
     const data = response?.results?.map((x) => ({
       domain: domains.find(
         (y) =>
-          x.text?.split(" ").join("") === y?.split("-").join("")?.split(".")[0],
+          x.text?.split(" ").join("") === y?.split("-").join("")?.split(".")[0]
       ),
       keyword: x?.text,
       keywordMetrics: x?.keywordMetrics || {

@@ -1,5 +1,6 @@
 "use strict";
-import { words as wordList } from "./words.js";
+// import { words as wordList } from "./words.js";
+const { wordList } = require("./words.js");
 const splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
 // const FILE_WORDS = require("./words");
 
@@ -172,4 +173,4 @@ class WordsNinja {
   }
 }
 
-export default WordsNinja;
+module.exports = WordsNinja;

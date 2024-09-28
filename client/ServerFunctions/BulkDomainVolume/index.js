@@ -1,12 +1,13 @@
-import axios from "axios";
-import WordsNinjaPack from "./lib/wordsNinja.js";
+// import axios from "axios";
+// import WordsNinjaPack from "./lib/wordsNinja.js";
+const axios = require("axios");
+const WordsNinjaPack = require("./lib/wordsNinja.js");
+const accessToken = require("../../accessToken.js");
 const WordsNinja = new WordsNinjaPack();
 
-export default async function BulkDomainVolume(socket, domains) {
+async function BulkDomainVolume(socket, domains) {
   // const keywords = name?.split(".")[0];
 
-  const accessToken =
-    "ya29.a0AcM612yrAArOL5-FucZM19l1FUeN75MOp3F8VrZ8dljurIiHxoQJzIDWs7zpTtj5WOBoPfx8ZyXqy0z-_jbkRt8N71Vop-Q2EzC95On4XvTZSp41nT8DoBAHYlbX6IGEYEfdZF8CPnNZfzFdiE4aaLHa6HP_Cq7jplwqGBwaCgYKAcsSAQ8SFQHGX2MiIxomPhqrcsUFhOKbmfIgLw0174";
   const apiUrl = `https://googleads.googleapis.com/v17/customers/9165971495:generateKeywordHistoricalMetrics`;
 
   const allWords = [];
@@ -44,14 +45,14 @@ export default async function BulkDomainVolume(socket, domains) {
             "developer-token": "Wdmer3gPaI2ZZaSuidrdeQ",
             "Content-Type": "application/json",
           },
-        },
+        }
       )
       .then((res) => res?.data);
     // console.log(domains);
     const data = response?.results?.map((x) => ({
       domain: domains.find(
         (y) =>
-          x.text?.split(" ").join("") === y?.split("-").join("")?.split(".")[0],
+          x.text?.split(" ").join("") === y?.split("-").join("")?.split(".")[0]
       ),
       keyword: x?.text,
       keywordMetrics: x?.keywordMetrics || {
@@ -60,10 +61,11 @@ export default async function BulkDomainVolume(socket, domains) {
         competitionIndex: "0",
       },
     }));
-    console.log;
+
     socket.emit("bulk-domain-volume", data);
   } catch (error) {
     console.error("Error fetching keyword ideas:", error?.response);
     // res.json("error");
   }
 }
+module.exports = BulkDomainVolume;

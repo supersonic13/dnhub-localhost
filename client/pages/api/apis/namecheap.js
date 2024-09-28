@@ -1,0 +1,46 @@
+import { client } from "../../../db";
+export default async function handler(req, res) {
+  const { api, userName, clientIp } = req.body;
+  try {
+    switch (req.method) {
+      case "POST":
+        const result = await client
+          .db("localhost-server")
+          .collection("namecheap-api")
+          .replaceOne({}, { api, userName, clientIp }, { upsert: true });
+
+        if (result.modifiedCount > 0 || result.upsertedCount > 0) {
+          res.json({
+            status: true,
+            message: "Updated successfully",
+          });
+        } else {
+          res.json({
+            status: false,
+            message:
+              "Update was not successful. Data remains same. Please change some input.",
+          });
+        }
+
+        break;
+
+      case "GET":
+        const doc = await client
+          .db("localhost-server")
+          .collection("namecheap-api")
+          .findOne();
+
+        res.json(doc);
+        break;
+    }
+  } catch (err) {
+    console.log(err);
+    res.json("Error, Please try again.");
+  }
+}
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};

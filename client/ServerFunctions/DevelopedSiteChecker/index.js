@@ -1,7 +1,6 @@
 const axios = require("axios");
 const WhoisLight = require("whois-light");
-// import axios from "axios";
-// import WhoisLight from "whois-light";
+
 const placeholderPatterns = [
   "This Domain is For Sale",
   "Make an Offer",
@@ -67,19 +66,12 @@ async function DevelopedSiteChecker(socket, domain) {
         }
         arr.map((x) => (obj[x[0]] = x[1]));
         return obj;
-        // console.log(obj);
-        // respond.json(obj);
       } else {
-        // console.log(res);
         return res;
-
-        // respond.json(res);
       }
     }
   );
   try {
-    // WHo is lookup
-
     const response = await axios.get(`http://${domain}`, {
       headers: {
         "User-Agent":
@@ -97,7 +89,17 @@ async function DevelopedSiteChecker(socket, domain) {
         // Domain Not Developed
         socket.emit("developed-site-checker", {
           domain,
-          whois,
+          age:
+            whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
+          registrar: whois?.Registrar || "-",
+          registeredOn:
+            whois?.["Creation Date"]?.slice(0, 10) ||
+            whois?.["Registered on"] ||
+            "-",
+          expiry:
+            whois?.["Registry Expiry Date"]?.slice(0, 10) ||
+            whois?.["Expiry date"] ||
+            "-",
           isDeveloped: false,
           status: response?.status,
           statusText: response?.statusText,
@@ -106,7 +108,17 @@ async function DevelopedSiteChecker(socket, domain) {
         // Domain Developed
         socket.emit("developed-site-checker", {
           domain,
-          whois,
+          age:
+            whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
+          registrar: whois?.Registrar || "-",
+          registeredOn:
+            whois?.["Creation Date"]?.slice(0, 10) ||
+            whois?.["Registered on"] ||
+            "-",
+          expiry:
+            whois?.["Registry Expiry Date"]?.slice(0, 10) ||
+            whois?.["Expiry date"] ||
+            "-",
           isDeveloped: true,
           status: response?.status,
           statusText: response?.statusText,
@@ -116,7 +128,16 @@ async function DevelopedSiteChecker(socket, domain) {
       // Domain Not Developed
       socket.emit("developed-site-checker", {
         domain,
-        whois,
+        age: whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
+        registrar: whois?.Registrar || "-",
+        registeredOn:
+          whois?.["Creation Date"]?.slice(0, 10) ||
+          whois?.["Registered on"] ||
+          "-",
+        expiry:
+          whois?.["Registry Expiry Date"]?.slice(0, 10) ||
+          whois?.["Expiry date"] ||
+          "-",
         isDeveloped: false,
         status: response?.status || err?.code,
         statusText: response?.statusText || "Domain Error",
@@ -126,7 +147,16 @@ async function DevelopedSiteChecker(socket, domain) {
     // Domain Error or not Found
     socket.emit("developed-site-checker", {
       domain,
-      whois,
+      age: whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
+      registrar: whois?.Registrar || "-",
+      registeredOn:
+        whois?.["Creation Date"]?.slice(0, 10) ||
+        whois?.["Registered on"] ||
+        "-",
+      expiry:
+        whois?.["Registry Expiry Date"]?.slice(0, 10) ||
+        whois?.["Expiry date"] ||
+        "-",
       isDeveloped: false,
       status: err?.response?.status || err?.code,
       statusText: err?.response?.statusText || "Domain Not Found",

@@ -1,6 +1,5 @@
-const nodemailer = require("nodemailer");
-const dnsMonitoring = require("./dns");
-
+import nodemailer from "nodemailer";
+import dnsMonitoring from "dns";
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,

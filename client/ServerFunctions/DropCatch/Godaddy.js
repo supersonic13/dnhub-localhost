@@ -1,17 +1,22 @@
 const WhoisLight = require("whois-light");
 const axios = require("axios");
-const xml2js = require("xml2js");
-const parser = new xml2js.Parser();
-function GodaddyDropCatch(socket, data) {
+const { client } = require("../../db");
+
+async function GodaddyDropCatch(socket, data) {
   // console.time("drop-catch");
   const { domains } = data;
-
-  const headers = {
-    Authorization:
-      "sso-key 3mM44UbgSaTnZa_k8GxyWC81cL93ub4i1FzV:UoKmqiHd1myEoSpqgC8rAQ",
-  };
+  //`sso-key 3mM44UbgSaTnZa_k8GxyWC81cL93ub4i1FzV:UoKmqiHd1myEoSpqgC8rAQ`,
 
   try {
+    const api = await client
+      .db("localhost-server")
+      .collection("godaddy-api")
+      .findOne({});
+
+    const headers = {
+      Authorization: `sso-key ${api?.api}:${api?.secret}`,
+    };
+
     for (const domain of domains) {
       const body = {
         consent: {

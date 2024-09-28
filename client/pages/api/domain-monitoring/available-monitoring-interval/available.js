@@ -1,11 +1,11 @@
-const axios = require("axios");
-const WhoisLight = require("whois-light");
-const dns2 = require("dns2");
+import WhoisLight from "whois-light";
+import dns2 from "dns2";
 const dns = new dns2();
-const aNewName = "irfan Habib";
-const anothername = "dsfsdfsd";
 
-async function availableMonitoring(domain, transporter) {
+export default async function availableMonitoring(
+  domain,
+  transporter,
+) {
   const whois = await WhoisLight.lookup(
     { format: true },
     domain?.domain,
@@ -46,4 +46,3 @@ async function availableMonitoring(domain, transporter) {
     console.log(`No changes detected for ${newObj?.domain}`);
   }
 }
-module.exports = availableMonitoring;

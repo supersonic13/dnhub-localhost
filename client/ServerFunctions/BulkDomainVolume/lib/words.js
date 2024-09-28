@@ -1,4 +1,4 @@
-export const words = `the
+exports.wordList = `the
 of
 in
 a
