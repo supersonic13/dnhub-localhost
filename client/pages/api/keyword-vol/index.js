@@ -28,18 +28,26 @@ export default async function handler(req, res) {
           }
         );
 
-        const keywordIdeas = response.data;
+        const data = response?.data?.results?.map((x) => ({
+          // domain: x?.text
+          //   ?.split(" ")
+          //   ?.map((x) =>
+          //     x?.slice(0, 1)?.toUpperCase()?.concat(x?.slice(1))?.join("")
+          //   ),
+          keyword: x?.text,
+          keywordMetrics: x?.keywordIdeaMetrics || {
+            avgMonthlySearches: 0,
+            competition: "LOW",
+            competitionIndex: "0",
+          },
+        }));
 
-        res.json(keywordIdeas);
+        res.json(data);
       case "GET":
         res.json("hello");
     }
   } catch (error) {
-    console.error(
-      "Error fetching keyword ideas:",
-      error?.response?.data?.error,
-      error.response?.data?.error?.details?.[0]?.errors
-    );
+    console.error("Error fetching keyword ideas:", error);
     res.json("error");
   }
 }

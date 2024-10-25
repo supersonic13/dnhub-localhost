@@ -1,34 +1,21 @@
 import axios from "axios";
-import WordsNinjaPack from "./lib/wordsNinja.js";
-import accessToken from "../../../../accessToken.js";
-const WordsNinja = new WordsNinjaPack();
+import accessToken from "../../../accessToken.js";
 
 export default async function bulkDomainVolume(req, respond) {
   // const keywords = name?.split(".")[0];
-  const domains = req?.body?.data;
+  const faqs = req?.body?.faqs;
   const apiUrl = `https://googleads.googleapis.com/v17/customers/9165971495:generateKeywordHistoricalMetrics`;
-  const allWords = [];
 
   try {
     switch (req.method) {
       case "POST":
-        await WordsNinja.loadDictionary();
-        domains?.map(async (x) => {
-          const words = WordsNinja.splitSentence(x?.split(".")[0], {
-            joinWords: true,
-          });
-          allWords.push(words);
-          //   console.log(words);
-        });
-        // console.log("all words", allWords);
-
         const response = await axios
           .post(
             apiUrl,
             {
               // selectedBrands: ["/g/11trqc4t8q"],
               // brandPrefix: "oxy",
-              keywords: [...allWords],
+              keywords: [...faqs],
               // geoTargetConstants: ["geoTargetConstants/2840"],
               // keywordSeed: {
               //   keywords: allWords,
@@ -47,11 +34,6 @@ export default async function bulkDomainVolume(req, respond) {
           .then((res) => res?.data);
         // console.log(domains);
         const data = response?.results?.map((x) => ({
-          domain: domains.find(
-            (y) =>
-              x.text?.split(" ").join("") ===
-              y?.split("-").join("")?.split(".")[0]
-          ),
           keyword: x?.text,
           keywordMetrics: x?.keywordMetrics || {
             avgMonthlySearches: 0,

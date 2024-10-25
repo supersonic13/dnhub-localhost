@@ -1,6 +1,7 @@
 const WhoisLight = require("whois-light");
 const axios = require("axios");
 const xml2js = require("xml2js");
+const { client } = require("../../db");
 const parser = new xml2js.Parser();
 async function NameCheapDropCatch(socket, data) {
   // console.time("drop-catch");
