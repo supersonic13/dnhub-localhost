@@ -23,7 +23,7 @@ export default async function DomainAnalyze(req, res) {
   const allDomains = [];
   const allWords = [];
   console.time("domain");
-  console.log("domain analyze");
+
   try {
     switch (req.method) {
       case "POST":
@@ -33,30 +33,29 @@ export default async function DomainAnalyze(req, res) {
 
             await WordsNinja.loadDictionary();
 
-            domains.split("\n").map((x) => {
-              // console.log(x.replace(/\d+/g, "").toLowerCase().split("."));
+            domains.split("\n").map((domain) => {
+              const dn = domain?.split(".")?.[0];
 
-              const words = WordsNinja.splitSentence(
-                x.replace(/\d+/g, "").split(".")[0], // remove domains that contain numbers
-                {
-                  capitalizeFirstLetter: true,
-                }
-              );
-              ///[0-9]/.test(x.split(".")[0]) ? "" :
-              // console.log(words);
+              //domain.replace(/\d+/g, "").split(".")[0], // remove domains that contain numbers
+              const words = WordsNinja.splitSentence(dn, {
+                capitalizeFirstLetter: true,
+              });
+
               allWords.push(words);
+
               allDomains.push({
-                domain: x,
-                keyword: x.split(".")[0],
-                tld: x.split(".")[1],
-                onlyWords: /^[a-zA-Z]+$/.test(x.split(".")[0]),
-                containNumber: /\d/.test(x.split(".")[0]),
-                numberOnly: /^[0-9]+$/.test(x.split(".")[0]),
-                hyphenated: /-/.test(x.split(".")[0]),
-                onlyNumberAndHyphen: /^[-\d]*-\d*[-\d]*$/.test(x.split(".")[0]),
-                onlyAlphabetAndHyphen: /^[a-zA-Z-]+$/.test(x.split(".")[0]), // not working
-                splittedWords: /[0-9]/.test(x.split(".")[0]) ? "" : words,
-                wordsCount: /[0-9]/.test(x.split(".")[0]) ? "" : words.length,
+                domain,
+                keyword: dn,
+                tld: domain?.split(".")[1],
+                onlyWords: /^[a-zA-Z]+$/.test(dn),
+                containNumber: /\d/.test(dn),
+                numberOnly: /^[0-9]+$/.test(dn),
+                hyphenated: /-/.test(dn),
+                // onlyNumberAndHyphen: /^[-\d]*-\d*[-\d]*$/.test(dn),
+                // onlyAlphabetAndHyphen: /^[a-zA-Z-]+$/.test(dn), // not working
+                splittedWords: words, ///[0-9]/.test(dn) ? "" :
+                wordsCount: words.length, // /[0-9]/.test(dn) ? "" :
+                length: domain?.split(".")?.[0]?.length,
               });
             });
 

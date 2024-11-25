@@ -1,5 +1,4 @@
-"use strict";
-import { words as wordList } from "./words.js";
+const { wordList } = require("./words");
 const splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
 // const FILE_WORDS = require("./words");
 
@@ -21,7 +20,7 @@ class WordsNinja {
       //   fs.readFile(FILE_WORDS, "utf8", function (err, data) {
       //     if (err) throw err;
 
-      let words = wordList.split("\n");
+      let words = wordList?.split("\n");
 
       words.forEach(function (word, index) {
         wordCost[word] = Math.log((index + 1) * Math.log(words.length));
