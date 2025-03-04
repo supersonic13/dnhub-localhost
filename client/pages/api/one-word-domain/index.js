@@ -61,6 +61,7 @@ export default async function OneWordDomain(req, respond) {
 
   // Wait for all promises to resolve or reject
   Promise.allSettled(promises).then(() => {
+    console.log(arr);
     axios
       .get(
         "https://sugapi.verisign-grs.com/ns-api/2.0/rank-tlds?",

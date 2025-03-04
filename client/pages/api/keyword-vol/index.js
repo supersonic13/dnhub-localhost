@@ -4,7 +4,7 @@ const fs = require("fs");
 const axios = require("axios");
 export default async function handler(req, res) {
   const keywords = req.body?.domain?.keywords;
-
+  // console.log(keywords);
   const apiUrl = `https://googleads.googleapis.com/v17/customers/9165971495:generateKeywordIdeas`;
 
   try {
@@ -48,6 +48,7 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error("Error fetching keyword ideas:", error);
+    // console.log("error?.response?.data?.error?.details");
     res.json("error");
   }
 }

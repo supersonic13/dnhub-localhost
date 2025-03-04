@@ -47,7 +47,7 @@ export default async function handler(req, res) {
         res.json("hello");
     }
   } catch (error) {
-    console.error("Error fetching keyword ideas:", error);
+    console.error("Error fetching keyword ideas:");
     res.json("error");
   }
 }
