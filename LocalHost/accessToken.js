@@ -1,0 +1,3 @@
+const accessToken =
+  "ya29.a0AZYkNZjHQq8bNogVTGdtKQvboeWWC9Bcyy7NkAtDmhYyZ98MLCwb1I3oyOLn-Rk6hiEe5KGMAl4UWARG4TKOw1yIm95yLN5Rh7_la3qFOFG2iyPcgQyCFx5XoKNilaM3EaCHKWCE_Wcq1EV19eUMSjON-WjRPiArqQ2Ykmy_fB0aCgYKAUESARASFQHGX2Mi71z52BfmBrAibEIDEQRM-w0178";
+module.exports = accessToken;

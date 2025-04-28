@@ -1,3 +1,0 @@
-const accessToken =
-  "ya29.a0AeXRPp6o3JQz0r_qdkplT1s9UT45PowGijezhl7wA6fUIvbqUwuUIyXVmH_BNiRCOAC7PUrfnBuWf7LvNqr6pboqF2HJxrNv1Ve5FGI1LozA9cL5Iyg2B9Qc_NDKeK7jLKplEPXShF831zUH-5-MXk3ZA0hg8fI6J0w2CkescZUaCgYKAbESARASFQHGX2MioG0WmHBXtGwpy9J3UdrVNA0178";
-module.exports = accessToken;
