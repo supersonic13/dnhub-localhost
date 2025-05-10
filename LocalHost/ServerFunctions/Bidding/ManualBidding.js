@@ -36,8 +36,8 @@ async function ManualBidding(socket) {
           socket.emit("manual-bidding", results);
         })
         .catch((err) => {
-          // console.log("some error", err?.response?.data);
-          socket.emit("multi-bidding", [
+          console.log("some error", err?.response?.data);
+          socket.emit("manual-bidding", [
             {
               domain: "Error",
               listingId: "Error",
