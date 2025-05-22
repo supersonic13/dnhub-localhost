@@ -1,4 +1,4 @@
-const { connectToMongoDB } = require("./db");
+// const { connectToMongoDB } = require("./db");
 const createServer = require("./server");
 const port = process.env.PORT || 5000;
 

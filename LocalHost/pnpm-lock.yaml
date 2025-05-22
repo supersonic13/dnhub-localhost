@@ -44,9 +44,6 @@ importers:
       google-trends-api:
         specifier: ^4.9.2
         version: 4.9.2
-      kmeans-js:
-        specifier: ^0.1.2
-        version: 0.1.2
       mongodb:
         specifier: ^6.0.0
         version: 6.9.0(socks@2.8.3)
@@ -86,9 +83,6 @@ importers:
       react-redux:
         specifier: ^8.1.2
         version: 8.1.3(@types/react@18.3.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(redux@4.2.1)
-      skmeans:
-        specifier: ^0.11.3
-        version: 0.11.3
       soap:
         specifier: ^1.1.4
         version: 1.1.4
@@ -101,9 +95,6 @@ importers:
       whois-light:
         specifier: ^1.1.7
         version: 1.1.7
-      wink-embeddings-sg-100d:
-        specifier: ^1.1.0
-        version: 1.1.0(wink-nlp@2.3.2)
       wink-eng-lite-web-model:
         specifier: ^1.8.1
         version: 1.8.1
@@ -2687,9 +2678,6 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  kmeans-js@0.1.2:
-    resolution: {integrity: sha512-7JOVsDTWsHpcUlzB3Y1Dvhrwd1F3eKu5ABeCkbkQ0Bav3wkSBq4grlQPz2gSzHsLiDO1MOEm6x3sHjXjoY+EeA==}
-
   language-subtag-registry@0.3.23:
     resolution: {integrity: sha512-0K65Lea881pHotoGEa5gDlMxt3pctLi2RplBb7Ezh4rRdLEOtgi7n4EwK9lamnUCkKBqaeKRVebTq6BAxSkpXQ==}
 
@@ -3391,9 +3379,6 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
-  skmeans@0.11.3:
-    resolution: {integrity: sha512-nccEnlSeOMNAYM9ETMSq+m15u8g0KRCIvH2an/ROTx4Igmci/j3oYHBPGdAeGjhR7knAVoIIQwr/wy2dN/eKQA==}
-
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -3764,12 +3749,6 @@ packages:
 
   whois-light@1.1.7:
     resolution: {integrity: sha512-6SnG/baWy3tOcYCFUnAoiQimI1WICpqukA7wM5Fzr4mkzH9q/qWWgxsBhaIlNJWd7y4wiPxBEHLczxbSrSKxew==}
-
-  wink-embeddings-sg-100d@1.1.0:
-    resolution: {integrity: sha512-SN/Ar/UzotWhkJiSQ+WUN/L+UCKvNU1sYgUlFzJv5QpC2qg14txpGafTxVJAEepZp4hbj2CBIhei2VT4FK4/OA==}
-    engines: {node: '>=16.0.0'}
-    peerDependencies:
-      wink-nlp: '>2.1.0'
 
   wink-eng-lite-web-model@1.8.1:
     resolution: {integrity: sha512-M2tSOU/rVNkDj8AS8IoKJaM7apJJjS0cN+hE8CPazfnB4A/ojyc9+7RMPk18UOiIdSyWk7MR6w8z9lWix2l5tA==}
@@ -7569,8 +7548,6 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  kmeans-js@0.1.2: {}
-
   language-subtag-registry@0.3.23: {}
 
   language-tags@1.0.9:
@@ -8275,8 +8252,6 @@ snapshots:
     dependencies:
       is-arrayish: 0.3.2
 
-  skmeans@0.11.3: {}
-
   slash@3.0.0: {}
 
   smart-buffer@4.2.0: {}
@@ -8729,10 +8704,6 @@ snapshots:
       isexe: 2.0.0
 
   whois-light@1.1.7: {}
-
-  wink-embeddings-sg-100d@1.1.0(wink-nlp@2.3.2):
-    dependencies:
-      wink-nlp: 2.3.2
 
   wink-eng-lite-web-model@1.8.1: {}
 

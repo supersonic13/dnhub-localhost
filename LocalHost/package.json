@@ -3,7 +3,7 @@
   "version": "1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon start.js",
+    "dev": "node start.js",
     "build": "next build",
     "start": "NODE_ENV=production node start.js",
     "lint": "next lint"
@@ -34,11 +34,12 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-redux": "^8.1.2",
-    "skmeans": "^0.11.3",
     "soap": "^1.1.4",
     "socket.io": "^4.7.5",
     "uuid": "^9.0.1",
     "whois-light": "^1.1.7",
+    "wink-eng-lite-web-model": "^1.8.1",
+    "wink-nlp": "^2.3.2",
     "wordpos": "^2.1.0",
     "xml2js": "^0.6.2"
   },

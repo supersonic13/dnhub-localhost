@@ -8,30 +8,31 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const cors = require("cors");
 
-const DevelopedSiteChecker = require("./ServerFunctions/DevelopedSiteChecker");
+const DevelopedSiteChecker = require("./src/ServerFunctions/DevelopedSiteChecker");
 
-const NewsHeadLines = require("./ServerFunctions/NewsTrends/NewsHeadLines");
-const NewsContent = require("./ServerFunctions/NewsTrends/NewsContent");
-const SaveKanban = require("./ServerFunctions/Kanban/SaveKanban");
-const GetKanban = require("./ServerFunctions/Kanban/GetKanban");
-const NameCheapDropCatch = require("./ServerFunctions/DropCatch/NameCheap");
-const DynadotDropCatch = require("./ServerFunctions/DropCatch/Dynadot");
-const GodaddyDropCatch = require("./ServerFunctions/DropCatch/Godaddy");
-const NameSiloDropCatch = require("./ServerFunctions/DropCatch/NameSilo");
-const TldBasedWords = require("./ServerFunctions/DomainAnalyze/TldBasedWords");
-const PriceMonitoringInterval = require("./ServerFunctions/DomainMonitoring/PriceMonitoringInterval");
-const DnsMonitoringInterval = require("./ServerFunctions/DomainMonitoring/DnsMonitoringInterval");
-const AvailableMonitoringInterval = require("./ServerFunctions/DomainMonitoring/AvailableMonitoringInterval");
-const StatusMonitoringInterval = require("./ServerFunctions/DomainMonitoring/StatusMonitoringInterval");
-const BulkWhois = require("./ServerFunctions/BulkWhois");
+const NewsHeadLines = require("./src/ServerFunctions/NewsTrends/NewsHeadLines");
+const NewsContent = require("./src/ServerFunctions/NewsTrends/NewsContent");
+const SaveKanban = require("./src/ServerFunctions/Kanban/SaveKanban");
+const GetKanban = require("./src/ServerFunctions/Kanban/GetKanban");
+const NameCheapDropCatch = require("./src/ServerFunctions/DropCatch/NameCheap");
+const DynadotDropCatch = require("./src/ServerFunctions/DropCatch/Dynadot");
+const GodaddyDropCatch = require("./src/ServerFunctions/DropCatch/Godaddy");
+const NameSiloDropCatch = require("./src/ServerFunctions/DropCatch/NameSilo");
+const TldBasedWords = require("./src/ServerFunctions/DomainAnalyze/TldBasedWords");
+const PriceMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/PriceMonitoringInterval");
+const DnsMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/DnsMonitoringInterval");
+const AvailableMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/AvailableMonitoringInterval");
+const StatusMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/StatusMonitoringInterval");
+const BulkWhois = require("./src/ServerFunctions/BulkWhois");
 const {
   default: BulkDomainVolume,
-} = require("./ServerFunctions/BulkDomainVolume");
-const RandomWordsAdvance = require("./ServerFunctions/RandomWordAdvance");
-const AutoCatchInterval = require("./ServerFunctions/DropCatch/AutoCatch");
-const GodaddyAuctionBidding = require("./ServerFunctions/Bidding/Godaddy");
-const ManualBidding = require("./ServerFunctions/Bidding/ManualBidding");
-const MultiBidding = require("./ServerFunctions/Bidding/MultiBidding");
+} = require("./src/ServerFunctions/BulkDomainVolume");
+const RandomWordsAdvance = require("./src/ServerFunctions/RandomWordAdvance");
+const AutoCatchInterval = require("./src/ServerFunctions/DropCatch/AutoCatch");
+const GodaddyAuctionBidding = require("./src/ServerFunctions/Bidding/Godaddy");
+const ManualBidding = require("./src/ServerFunctions/Bidding/ManualBidding");
+const MultiBidding = require("./src/ServerFunctions/Bidding/MultiBidding");
+const GenerateToken = require("./src/ServerFunctions/Google/GenerateToken");
 
 const createServer = async () => {
   await app.prepare();
@@ -78,6 +79,10 @@ const createServer = async () => {
   /* ------Dns Monitoring Function---------*/
   AutoCatchInterval();
   /* ------Dns Monitoring Function---------*/
+
+  /* ------Generate Google Ads Refresh Token Function---------*/
+  GenerateToken();
+  /* ------Generate Google Ads Refresh Token Function---------*/
 
   io.on("connection", (socket) => {
     console.log("A user connected", socket.id);
