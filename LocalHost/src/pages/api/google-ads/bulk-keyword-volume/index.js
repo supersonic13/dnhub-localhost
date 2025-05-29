@@ -40,7 +40,10 @@ export default async function bulkDomainVolume(req, respond) {
         break;
     }
   } catch (error) {
-    console.error("Error fetching keyword ideas:", error?.response);
+    console.log(
+      "Error fetching keyword ideas:",
+      JSON.stringify(error?.response?.data)
+    );
     // res.json("error");
   }
 }

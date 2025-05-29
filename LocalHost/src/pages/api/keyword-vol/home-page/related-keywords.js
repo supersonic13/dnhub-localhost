@@ -1,4 +1,4 @@
-import WordsNinjaPack from "../../domain-analyze/lib/wordsNinja.js";
+import WordsNinjaPack from "../../domain-research/domain-analyze/lib/wordsNinja.js";
 import { connectToMongoDB } from "../../../../../db.js";
 import axios from "axios";
 const WordsNinja = new WordsNinjaPack();

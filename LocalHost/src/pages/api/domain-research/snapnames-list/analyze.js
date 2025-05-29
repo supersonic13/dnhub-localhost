@@ -1,4 +1,4 @@
-import { connectToMongoDB } from "../../../../db";
+import { connectToMongoDB } from "../../../../../db";
 
 import { Worker } from "worker_threads";
 import os from "os";
@@ -31,9 +31,12 @@ export default async function handler(req, res) {
 
     const runWorker = (chunk) =>
       new Promise((resolve, reject) => {
-        const worker = new Worker("./src/pages/api/godaddy-auction/worker.js", {
-          workerData: { chunk },
-        });
+        const worker = new Worker(
+          "./src/pages/api/domain-research/snapnames-list/worker.js",
+          {
+            workerData: { chunk },
+          }
+        );
         worker.on("message", resolve);
         worker.on("error", reject);
         worker.on("exit", (code) => {

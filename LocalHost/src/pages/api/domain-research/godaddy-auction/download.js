@@ -4,7 +4,7 @@ import { createWriteStream } from "fs";
 import { unlink } from "fs/promises";
 import { pipeline } from "stream";
 import * as AdmZip from "adm-zip";
-import { connectToMongoDB } from "../../../../db";
+import { connectToMongoDB } from "../../../../../db";
 // Convert pipeline to promise-based
 const streamPipeline = promisify(pipeline);
 

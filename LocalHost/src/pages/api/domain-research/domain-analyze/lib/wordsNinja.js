@@ -1,35 +1,40 @@
-const wordList = require("./words");
-const splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
-// const FILE_WORDS = require("./words");
+// const wordList = require("./words");
+// const splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
+// // const FILE_WORDS = require("./words");
 
-let maxWordLen = 0;
-let wordCost = {};
-let maxCost = 9e999;
+// let maxWordLen = 0;
+// let wordCost = {};
+// let maxCost = 9e999;
 
 /**
  * WordsNinja, Split your string text without space to english words
  * @class
  */
 class WordsNinja {
+  constructor() {
+    this.wordList = require("./words");
+    this.splitRegex = new RegExp("[^a-zA-Z0-9']+", "g");
+    this.maxWordLen = 0;
+    this.wordCost = {};
+    this.maxCost = 9e999;
+    this.loaded = false;
+  }
+
   /**
    * Load Dictionary
    * @return {Object} Objects of dictionary
    */
-  loadDictionary() {
-    return new Promise((resolve) => {
-      //   fs.readFile(FILE_WORDS, "utf8", function (err, data) {
-      //     if (err) throw err;
-
-      let words = wordList?.split("\n");
-
-      words.forEach(function (word, index) {
-        wordCost[word] = Math.log((index + 1) * Math.log(words.length));
-        if (word.length > maxWordLen) maxWordLen = word.length;
-        if (wordCost[word] < maxCost) maxCost = wordCost[word];
-      });
-      resolve(wordCost);
-      //   });
+  async loadDictionary() {
+    if (this.loaded) return this.wordCost;
+    let words = this.wordList?.split("\n");
+    words.forEach((word, index) => {
+      this.wordCost[word] = Math.log((index + 1) * Math.log(words.length));
+      if (word.length > this.maxWordLen) this.maxWordLen = word.length;
+      if (this.wordCost[word] < this.maxCost)
+        this.maxCost = this.wordCost[word];
     });
+    this.loaded = true;
+    return this.wordCost;
   }
 
   /**
@@ -42,38 +47,21 @@ class WordsNinja {
    */
   splitSentence(
     string,
-    { camelCaseSplitter, capitalizeFirstLetter, joinWords } = {}
+    {
+      camelCaseSplitter = false,
+      capitalizeFirstLetter = false,
+      joinWords = false,
+    } = {}
   ) {
     let list = [];
-    let that = this;
-    camelCaseSplitter = camelCaseSplitter || false;
-    capitalizeFirstLetter = capitalizeFirstLetter || false;
-    joinWords = joinWords || false;
     if (camelCaseSplitter) string = this.camelCaseSplitter(string);
-
-    string.split(splitRegex).forEach(function (sub) {
-      that.splitWords(sub).forEach(function (word) {
-        word = capitalizeFirstLetter ? that.capitalizeFirstLetter(word) : word;
+    string.split(this.splitRegex).forEach((sub) => {
+      this.splitWords(sub).forEach((word) => {
+        word = capitalizeFirstLetter ? this.capitalizeFirstLetter(word) : word;
         list.push(word);
       });
     });
-    if (joinWords) return list.join(" ");
-    else return list;
-  }
-
-  /**
-   * Add words to dictionary
-   * @param {Array|string} words Word(s) to add dictionary
-   * @return {void}
-   */
-  addWords(words) {
-    if (Array.isArray(words)) {
-      for (let value of words) this.addWords(value);
-    } else {
-      let word = words.toLocaleLowerCase();
-      wordCost[word] = maxCost;
-      if (word.length > maxWordLen) maxWordLen = word.length;
-    }
+    return joinWords ? list.join(" ") : list;
   }
 
   /**
@@ -83,57 +71,43 @@ class WordsNinja {
    * @return {Array} Splited Words
    */
   splitWords(s) {
+    s = s.toLowerCase();
     let cost = [0];
-
+    const { maxWordLen, wordCost } = this;
     function best_match(i) {
       let candidates = cost.slice(Math.max(0, i - maxWordLen), i).reverse();
       let minPair = [Number.MAX_SAFE_INTEGER, 0];
-      candidates.forEach(function (c, k) {
-        let ccost;
-        if (wordCost[s.substring(i - k - 1, i).toLowerCase()]) {
-          ccost = c + wordCost[s.substring(i - k - 1, i).toLowerCase()];
-        } else {
-          ccost = Number.MAX_SAFE_INTEGER;
-        }
-        if (ccost < minPair[0]) {
-          minPair = [ccost, k + 1];
-        }
+      candidates.forEach((c, k) => {
+        let ccost =
+          wordCost[s.substring(i - k - 1, i)] || Number.MAX_SAFE_INTEGER;
+        ccost += c;
+        if (ccost < minPair[0]) minPair = [ccost, k + 1];
       });
       return minPair;
     }
-
     for (let i = 1; i < s.length + 1; i++) {
       cost.push(best_match(i)[0]);
     }
-
     let out = [];
     let i = s.length;
     while (i > 0) {
-      let c = best_match(i)[0];
-      let k = best_match(i)[1];
-      //if (c == cost[i])
-      //    console.log("Alert: " + c);
-
+      let [c, k] = best_match(i);
       let newToken = true;
       if (s.slice(i - k, i) != "'") {
         if (out.length > 0) {
+          let last = out[out.length - 1];
           if (
-            out[-1] == "'s" ||
-            (Number.isInteger(s[i - 1]) && Number.isInteger(out[-1][0]))
+            last == "'s" ||
+            (Number.isInteger(s[i - 1]) && Number.isInteger(last?.[0]))
           ) {
-            out[-1] = s.slice(i - k, i) + out[-1];
+            out[out.length - 1] = s.slice(i - k, i) + last;
             newToken = false;
           }
         }
       }
-
-      if (newToken) {
-        out.push(s.slice(i - k, i));
-      }
-
+      if (newToken) out.push(s.slice(i - k, i));
       i -= k;
     }
-
     return out.reverse();
   }
 
@@ -148,7 +122,6 @@ class WordsNinja {
     let notNullString = inputString || "";
     let trimmedString = notNullString.trim();
     let arrayOfStrings = trimmedString.split(" ");
-
     let splitStringsArray = [];
     arrayOfStrings.forEach((tempString) => {
       if (tempString != "") {
@@ -156,7 +129,6 @@ class WordsNinja {
         splitStringsArray.push(splitWords);
       }
     });
-
     return splitStringsArray.join(" ");
   }
 
