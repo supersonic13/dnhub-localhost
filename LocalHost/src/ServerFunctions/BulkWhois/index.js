@@ -19,9 +19,9 @@ function BulkWhois(socket, domain) {
             arr.push(chunk);
           }
           arr.map((x) => (obj[x[0]] = x[1]));
-          socket.emit("bulk-whois", obj);
+          socket.emit("bulk-whois", { whois: obj, domain });
         } else {
-          socket.emit("bulk-whois", res);
+          socket.emit("bulk-whois", { whois: res, domain });
         }
       })
       .catch((err) => console.log(err.message));

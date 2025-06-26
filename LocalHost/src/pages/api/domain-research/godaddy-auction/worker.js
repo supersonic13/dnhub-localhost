@@ -18,7 +18,7 @@ const as = nlp.as;
   chunk.forEach((domain) => {
     const domainName = domain?.domainName?.toLowerCase();
     const dn = domainName?.split(".")?.[0];
-    const words = WordsNinja.splitSentence(dn, { capitalizeFirstLetter: true });
+    const words = WordsNinja.splitSentence(dn);
 
     allWords.push(...words);
 

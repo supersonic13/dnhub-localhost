@@ -2,10 +2,10 @@ import axios from "axios";
 import WordsNinjaPack from "./lib/wordsNinja.js";
 import { connectToMongoDB } from "../../../../../db.js";
 
-export default async function bulkDomainVolume(req, respond) {
+export default async function bulkDomainVolume(req, res) {
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
-  const apiUrl = `https://googleads.googleapis.com/v17/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
+  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
 
   const domains = req?.body?.domains;
 
@@ -15,48 +15,38 @@ export default async function bulkDomainVolume(req, respond) {
     switch (req.method) {
       case "POST":
         await WordsNinja.loadDictionary();
-        domains?.map(async (x) => {
+        for (const x of domains || []) {
           const words = WordsNinja.splitSentence(
             x?.split(".")[0],
             {
               joinWords: true,
-              // camelCaseSplitter: true,
               capitalizeFirstLetter: true,
             },
           );
           allWords.push(words);
-        });
-        // console.log("all words", allWords);
+        }
 
-        const response = await axios
-          .post(
-            apiUrl,
-            {
-              // selectedBrands: ["/g/11trqc4t8q"],
-              // brandPrefix: "oxy",
-              keywords: [...allWords],
-              // geoTargetConstants: ["geoTargetConstants/2840"],
-              // keywordSeed: {
-              //   keywords: allWords,
-              // },
-              // pageSize: 50,
+        const response = await axios.post(
+          apiUrl,
+          { keywords: allWords },
+          {
+            headers: {
+              Authorization: `Bearer ${api?.accessToken}`,
+              "developer-token": api?.devToken,
+              "Content-Type": "application/json",
             },
+          },
+        );
 
-            {
-              headers: {
-                Authorization: `Bearer ${api?.accessToken}`,
-                "developer-token": api?.devToken,
-                "Content-Type": "application/json",
-              },
-            },
-          )
-          .then((res) => res?.data);
-        // console.log(domains);
-        const data = response?.results?.map((x) => ({
+        const data = response?.data?.results?.map((x) => ({
           domain: domains.find(
             (y) =>
               x.text?.split(" ").join("") ===
-              y?.split("-").join("")?.split(".")[0],
+              y
+                ?.split("-")
+                .join("")
+                ?.split(".")[0]
+                .toLowerCase(),
           ),
           keyword: x?.text,
           keywordMetrics: x?.keywordMetrics || {
@@ -64,17 +54,24 @@ export default async function bulkDomainVolume(req, respond) {
             competition: "LOW",
             competitionIndex: "0",
           },
+          closeVariants: x?.closeVariants || [],
         }));
-        respond.json(data);
+        return res.status(200).json(data);
     }
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
-      error?.response,
+      error?.response || error,
     );
-    // res.json("error");
+    return res
+      .status(500)
+      .json({
+        error: "Error fetching keyword ideas",
+        details: error?.message,
+      });
   }
 }
+
 export const config = {
   api: {
     externalResolver: true,

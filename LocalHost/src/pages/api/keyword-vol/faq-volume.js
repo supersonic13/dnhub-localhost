@@ -4,7 +4,7 @@ import { connectToMongoDB } from "../../../../db";
 export default async function bulkDomainVolume(req, respond) {
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
-  const apiUrl = `https://googleads.googleapis.com/v17/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
+  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
 
   const faqs = req?.body?.faqs;
 
@@ -24,7 +24,7 @@ export default async function bulkDomainVolume(req, respond) {
                 "developer-token": api?.devToken,
                 "Content-Type": "application/json",
               },
-            }
+            },
           )
           .then((res) => res?.data);
         // console.log(domains);
@@ -40,7 +40,10 @@ export default async function bulkDomainVolume(req, respond) {
         break;
     }
   } catch (error) {
-    console.error("Error fetching keyword ideas:", error?.response);
+    console.error(
+      "Error fetching keyword ideas:",
+      error?.response,
+    );
     // res.json("error");
   }
 }

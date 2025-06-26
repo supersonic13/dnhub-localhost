@@ -1,4 +1,4 @@
-import { connectToMongoDB } from "../../../db";
+import { connectToMongoDB } from "../../../../db";
 export default async function MarketPlace(req, res) {
   try {
     const { client } = await connectToMongoDB();
