@@ -1,34 +1,31 @@
 import { connectToMongoDB } from "../../../../../db";
 
 export default async function handler(req, res) {
-  const {
-    accessToken,
-    customerId,
-    devToken,
-    clientId,
-    clientSecret,
-    refToken,
-  } = req.body;
+  const { customerId, devToken, clientId, clientSecret } =
+    req.body;
 
   try {
     const { db } = await connectToMongoDB();
 
     switch (req.method) {
       case "POST": {
-        const result = await db.collection("google-api").replaceOne(
-          {},
-          {
-            accessToken,
-            customerId,
-            devToken,
-            clientId,
-            clientSecret,
-            refToken,
-          },
-          { upsert: true }
-        );
+        const result = await db
+          .collection("google-api")
+          .replaceOne(
+            {},
+            {
+              customerId,
+              devToken,
+              clientId,
+              clientSecret,
+            },
+            { upsert: true },
+          );
 
-        if (result.modifiedCount > 0 || result.upsertedCount > 0) {
+        if (
+          result.modifiedCount > 0 ||
+          result.upsertedCount > 0
+        ) {
           return res.status(200).json({
             status: true,
             message: "Updated successfully",

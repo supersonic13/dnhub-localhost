@@ -1,4 +1,4 @@
-const WhoisLight = require("whois-light");
+const WhoisLight = require("../../lib");
 const axios = require("axios");
 const { client } = require("../../../db");
 
@@ -103,9 +103,13 @@ async function GodaddyDropCatch(socket, data) {
         renewAuto: true,
       };
       axios
-        .post(`https://api.ote-godaddy.com/v1/domains/purchase`, body, {
-          headers,
-        })
+        .post(
+          `https://api.ote-godaddy.com/v1/domains/purchase`,
+          body,
+          {
+            headers,
+          },
+        )
         .then((res) => {
           socket.emit("godaddy-catched", {
             domain,
@@ -119,7 +123,8 @@ async function GodaddyDropCatch(socket, data) {
           socket.emit("godaddy-catched", {
             domain,
             status: err?.response?.data?.code || "success",
-            errorStatus: err?.response?.data?.message || "success",
+            errorStatus:
+              err?.response?.data?.message || "success",
             responseCode: err?.response?.data?.itemCount,
           });
         });
@@ -128,7 +133,9 @@ async function GodaddyDropCatch(socket, data) {
     for (const domain of domains) {
       WhoisLight.lookup({ format: true }, domain)
         .then((res) => {
-          if (domain.toLowerCase().includes(".uk" || ".co.uk")) {
+          if (
+            domain.toLowerCase().includes(".uk" || ".co.uk")
+          ) {
             const raw = res._raw
               .split("\r\n")
               .map((x) => x.split("\n"))

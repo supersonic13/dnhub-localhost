@@ -48,7 +48,6 @@ export default function Header() {
           </div>
           <div className="w-full flex items-center justify-end ms-auto md:justify-between gap-x-1 md:gap-x-3">
             <div className="hidden md:block">
-              {/* Search Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                   <svg
@@ -133,9 +132,8 @@ export default function Header() {
                   <span className="text-xs">/</span>
                 </div>
               </div>
-              {/* End Search Input */}
             </div>
-            <div className="flex flex-row items-center justify-end gap-1">
+            {/* <div className="flex flex-row items-center justify-end gap-1">
               <button
                 type="button"
                 className="md:hidden size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
@@ -198,7 +196,7 @@ export default function Header() {
                 </svg>
                 <span className="sr-only">Activity</span>
               </button>
-              {/* Dropdown */}
+
               <div className="hs-dropdown [--placement:bottom-right] relative inline-flex">
                 <button
                   id="hs-dropdown-account"
@@ -221,7 +219,9 @@ export default function Header() {
                   aria-labelledby="hs-dropdown-account"
                 >
                   <div className="py-3 px-5 bg-gray-100 rounded-t-lg">
-                    <p className="text-sm text-gray-500">Signed in as</p>
+                    <p className="text-sm text-gray-500">
+                      Signed in as
+                    </p>
                     <p className="text-sm font-medium text-gray-800">
                       james@site.com
                     </p>
@@ -318,8 +318,8 @@ export default function Header() {
                   </div>
                 </div>
               </div>
-              {/* End Dropdown */}
-            </div>
+
+            </div> */}
           </div>
         </nav>
       </header>

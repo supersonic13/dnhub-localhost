@@ -1,5 +1,5 @@
 const axios = require("axios");
-import WhoisLight from "whois-light";
+import WhoisLight from "lib";
 import { ccTld } from "./tlds2";
 export default async function OneWordDomain(req, respond) {
   const { word } = req.body;
@@ -20,26 +20,29 @@ export default async function OneWordDomain(req, respond) {
         const availability = resp?.["Creation Date"]
           ? "registered"
           : resp?.registered
-          ? "registered"
-          : resp?.created
-          ? "registered"
-          : resp?.registrant
-          ? "registered"
-          : resp?.["Registered on"]
-          ? "registered"
-          : resp?.["Created on"]
-          ? "registered"
-          : ["connect", "ok", "active"].includes(resp?.Status)
-          ? "registered"
-          : resp?.Registrant
-          ? "registered"
-          : resp?.Domain
-          ? "registered"
-          : resp?.["registration status"] == "available"
-          ? "available"
-          : resp?.["created............"]
-          ? "registered"
-          : "available";
+            ? "registered"
+            : resp?.created
+              ? "registered"
+              : resp?.registrant
+                ? "registered"
+                : resp?.["Registered on"]
+                  ? "registered"
+                  : resp?.["Created on"]
+                    ? "registered"
+                    : ["connect", "ok", "active"].includes(
+                          resp?.Status,
+                        )
+                      ? "registered"
+                      : resp?.Registrant
+                        ? "registered"
+                        : resp?.Domain
+                          ? "registered"
+                          : resp?.["registration status"] ==
+                              "available"
+                            ? "available"
+                            : resp?.["created............"]
+                              ? "registered"
+                              : "available";
 
         const domain = {
           name: who,
@@ -65,7 +68,7 @@ export default async function OneWordDomain(req, respond) {
       .get(
         "https://sugapi.verisign-grs.com/ns-api/2.0/rank-tlds?",
 
-        { params }
+        { params },
       )
       .then((res) => {
         const gTLD = res.data?.results;

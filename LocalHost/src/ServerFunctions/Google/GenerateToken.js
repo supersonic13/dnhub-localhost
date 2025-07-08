@@ -11,19 +11,22 @@ async function refreshToken() {
   }
 
   try {
-    const response = await axios.post("https://oauth2.googleapis.com/token", {
-      client_id: doc.clientId,
-      client_secret: doc.clientSecret,
-      grant_type: "refresh_token",
-      refresh_token: doc.refToken,
-    });
+    const response = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      {
+        client_id: doc.clientId,
+        client_secret: doc.clientSecret,
+        grant_type: "refresh_token",
+        refresh_token: doc.refreshToken,
+      },
+    );
 
     const result = await db
       .collection("google-api")
       .updateOne(
         {},
         { $set: { accessToken: response?.data?.access_token } },
-        { upsert: true }
+        { upsert: true },
       );
 
     if (result.modifiedCount > 0 || result.upsertedCount > 0) {

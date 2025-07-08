@@ -1,32 +1,38 @@
-import axios from "axios";
 import { connectToMongoDB } from "../../../../../db";
 
 export default async function handler(req, res) {
   try {
+    const {
+      account: {
+        access_token,
+        expires_at,
+        refresh_token,
+        refresh_token_expires_in,
+      },
+    } = req.body;
     const { db } = await connectToMongoDB();
-    const doc = await db.collection("google-api").findOne();
 
     if (req.method === "POST") {
       try {
-        const response = await axios.post(
-          "https://oauth2.googleapis.com/token",
-          {
-            client_id: doc?.clientId,
-            client_secret: doc?.clientSecret,
-            grant_type: "refresh_token",
-            refresh_token: doc?.refToken,
-          }
-        );
-
         const result = await db
           .collection("google-api")
           .updateOne(
             {},
-            { $set: { accessToken: response?.data?.access_token } },
-            { upsert: true }
+            {
+              $set: {
+                accessToken: access_token,
+                refreshToken: refresh_token,
+                accessTokenExpiresAt: expires_at,
+                refreshTokenExpiresIn: refresh_token_expires_in,
+              },
+            },
+            { upsert: true },
           );
 
-        if (result.modifiedCount > 0 || result.upsertedCount > 0) {
+        if (
+          result.modifiedCount > 0 ||
+          result.upsertedCount > 0
+        ) {
           return res.json({
             status: true,
             message: "Updated successfully",
@@ -42,17 +48,20 @@ export default async function handler(req, res) {
         console.error(err);
         return res.status(500).json({
           status: false,
-          message: "Failed to update access token.",
+          message: "Failed to update auth code",
         });
       }
     } else {
-      res.status(405).json({ status: false, message: "Method not allowed" });
+      res
+        .status(405)
+        .json({ status: false, message: "Method not allowed" });
     }
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({ status: false, message: "Server error. Please try again." });
+    res.status(500).json({
+      status: false,
+      message: "Server error. Please try again.",
+    });
   }
 }
 

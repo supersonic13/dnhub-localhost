@@ -61,11 +61,15 @@ export default function GodaddyApi() {
       })
       .then((res) => {
         setLoading(false);
-        toast.success(res.data?.message, { position: "bottom-right" });
+        toast.success(res.data?.message, {
+          position: "bottom-right",
+        });
       })
       .catch((err) => {
         setLoading(false);
-        toast.error("Some Error Occurred", { position: "bottom-right" });
+        toast.error("Some Error Occurred", {
+          position: "bottom-right",
+        });
       });
   };
 
@@ -83,7 +87,7 @@ export default function GodaddyApi() {
       })
       .catch((err) => {
         toast.error(
-          "Some error occurred. Please enter api and secret or try again."
+          "Some error occurred. Please enter api and secret or try again.",
         );
       });
   };
@@ -130,7 +134,7 @@ export default function GodaddyApi() {
           Please enter API and other details.
         </Chip>
         <Spacer y={1} />
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-3 sm:w-[50%]">
           <Input
             value={api}
             onChange={(e) => setApi(e.target.value)}
@@ -152,14 +156,6 @@ export default function GodaddyApi() {
           <Chip variant="flat" radius="sm" color={"secondary"}>
             This field only for Google Auction Bidding Only
           </Chip>
-          <Button
-            className="!py-0"
-            size="sm"
-            color="primary"
-            onClick={getCustomerId}
-          >
-            Get Customer ID
-          </Button>
         </div>
         <Spacer y={1} />
         <Input
@@ -168,15 +164,26 @@ export default function GodaddyApi() {
           type="text"
           label="Enter Shopper ID to get Customer ID"
           placeholder="617440553"
+          className="sm:w-[50%]"
         />
-        <Spacer y={1} />
-        <Input
-          value={customerId}
-          onChange={(e) => setCustomerId(e.target.value)}
-          type="text"
-          label="Google Auction Customer Id | For Auction Bidding Only"
-          placeholder="617440553"
-        />
+        <Spacer y={3} />
+        <div className="flex gap-3 items-center sm:w-[50%]">
+          <Input
+            value={customerId}
+            onChange={(e) => setCustomerId(e.target.value)}
+            type="text"
+            label="Google Auction Customer Id | For Auction Bidding Only"
+            placeholder="617440553"
+          />
+          <Button
+            className=""
+            // size="sm"
+            color="primary"
+            onClick={getCustomerId}
+          >
+            Get Customer ID
+          </Button>
+        </div>
         <Spacer y={4} />
         <Chip variant="flat" radius="sm" color={"secondary"}>
           Please enter Contact Information. This is mandetory.

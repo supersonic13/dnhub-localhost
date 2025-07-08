@@ -1,7 +1,7 @@
 const axios = require("axios");
 const WordsNinjaPack = require("./lib/wordsNinja.js");
-const WordsNinja = new WordsNinjaPack();
 const { connectToMongoDB } = require("../../../db.js");
+const WordsNinja = new WordsNinjaPack();
 
 async function BulkDomainVolume(socket, domains) {
   const { db } = await connectToMongoDB();
@@ -32,14 +32,15 @@ async function BulkDomainVolume(socket, domains) {
             "developer-token": api?.devToken,
             "Content-Type": "application/json",
           },
-        }
+        },
       )
       .then((res) => res?.data);
 
     const data = response?.results?.map((x) => ({
       domain: domains.find(
         (y) =>
-          x.text?.split(" ").join("") === y?.split("-").join("")?.split(".")[0]
+          x.text?.split(" ").join("") ===
+          y?.split("-").join("")?.split(".")[0],
       ),
       keyword: x?.text,
       keywordMetrics: x?.keywordMetrics || {
@@ -51,7 +52,10 @@ async function BulkDomainVolume(socket, domains) {
 
     socket.emit("bulk-domain-volume", data);
   } catch (error) {
-    console.error("Error fetching keyword ideas:", error?.response);
+    console.error(
+      "Error fetching keyword ideas:",
+      error?.response,
+    );
     // res.json("error");
   }
 }

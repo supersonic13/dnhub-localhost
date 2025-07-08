@@ -1,7 +1,9 @@
-import Layout from "../Components/Layout";
-
 const Home = ({ data, themes, affiliateLink }) => {
-  return <>'home page'</>;
+  return (
+    <>
+      <p>Please configure your APIs</p>
+    </>
+  );
 };
 
 export default Home;

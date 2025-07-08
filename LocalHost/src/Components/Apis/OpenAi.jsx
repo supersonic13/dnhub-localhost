@@ -1,4 +1,10 @@
-import { Button, Chip, Divider, Input, Spacer } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Divider,
+  Input,
+  Spacer,
+} from "@nextui-org/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -24,7 +30,9 @@ export default function OpenAi() {
       })
       .catch((err) => {
         setLoading(false);
-        toast.error("Some Error Occurred", { position: "bottom-right" });
+        toast.error("Some Error Occurred", {
+          position: "bottom-right",
+        });
       });
   };
 
@@ -49,11 +57,11 @@ export default function OpenAi() {
       <Divider />
 
       <Spacer y="4" />
-      <Chip variant="flat" radius="sm" color={"secondary"}>
+      {/* <Chip variant="flat" radius="sm" color={"secondary"}>
         If you disable, Our inbuilt AI Generator tool will be used. Please refer
         to the documentation on how to get Open Ai API.
-      </Chip>
-      <div>
+      </Chip> */}
+      <div className="sm:w-[50%]">
         <Spacer y={2} />
         <Input
           value={apiKey}
@@ -73,9 +81,10 @@ export default function OpenAi() {
         <Spacer y={2} />
 
         <p className="text-xs text-secondary">
-          Please type the model name currectly. We recommend to use GPT-4o mini
-          model. Its cost efficient and sufficient for domain name generator.
-          But you can use any model.
+          Please type the model name currectly. We recommend to
+          use <span className="font-bold">gpt-4o-mini</span>{" "}
+          model. Its cost efficient and sufficient for domain
+          name generator. But you can use any model.
         </p>
         <Spacer y={4} />
         <Button

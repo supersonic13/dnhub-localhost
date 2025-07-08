@@ -1,4 +1,10 @@
-import { Button, Chip, Divider, Input, Spacer } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Divider,
+  Input,
+  Spacer,
+} from "@nextui-org/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -28,7 +34,9 @@ export default function SedoApi() {
       .catch((err) => {
         setLoading(false);
         console.log(err);
-        toast.error("Some Error Occurred", { position: "bottom-right" });
+        toast.error("Some Error Occurred", {
+          position: "bottom-right",
+        });
       });
   };
 
@@ -48,14 +56,15 @@ export default function SedoApi() {
     <div>
       <Toaster />
       <h4 className="text-xl font-semibold text-violet-700 mb-2">
-        Sedo API Settings
+        Sedo API
       </h4>
 
       <Divider />
       <Spacer y={2} />
       <Chip variant="flat" radius="sm" color={"secondary"}>
-        If you disable, premium domains will not shown. Please refer to the
-        documentation on how to get Sedo API for free.
+        If you are not obtaining Sedo API, premium domains and
+        Domain Price Monitoring will not work. Please refer to
+        the documentation on how to get Sedo API for free.
       </Chip>
       <div>
         <Spacer y={2} />

@@ -1,6 +1,6 @@
-import WhoisLight from "whois-light";
 import { ccTld } from "pages/api/one-word-domain/tlds2";
 import axios from "axios";
+import WhoisLight from "lib";
 
 export default async function handler(req, res) {
   const { domain } = req.body;

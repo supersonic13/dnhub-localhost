@@ -20,13 +20,10 @@ const GodaddyDropCatch = require("./src/ServerFunctions/DropCatch/Godaddy");
 const NameSiloDropCatch = require("./src/ServerFunctions/DropCatch/NameSilo");
 const TldBasedWords = require("./src/ServerFunctions/DomainAnalyze/TldBasedWords");
 const PriceMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/PriceMonitoringInterval");
-const DnsMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/DnsMonitoringInterval");
-const AvailableMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/AvailableMonitoringInterval");
+
 const StatusMonitoringInterval = require("./src/ServerFunctions/DomainMonitoring/StatusMonitoringInterval");
 const BulkWhois = require("./src/ServerFunctions/BulkWhois");
-const {
-  default: BulkDomainVolume,
-} = require("./src/ServerFunctions/BulkDomainVolume");
+const BulkDomainVolume = require("./src/ServerFunctions/BulkDomainVolume");
 const RandomWordsAdvance = require("./src/ServerFunctions/RandomWordAdvance");
 const AutoCatchInterval = require("./src/ServerFunctions/DropCatch/AutoCatch");
 const GodaddyAuctionBidding = require("./src/ServerFunctions/Bidding/Godaddy");
@@ -57,7 +54,7 @@ const createServer = async () => {
       extended: false,
       limit: "5000mb",
       parameterLimit: 50000000,
-    })
+    }),
   );
 
   /* ------Price Monitoring Function---------*/
@@ -77,7 +74,7 @@ const createServer = async () => {
   /* ------Dns Monitoring Function---------*/
 
   /* ------Dns Monitoring Function---------*/
-  AutoCatchInterval();
+  // AutoCatchInterval();
   /* ------Dns Monitoring Function---------*/
 
   /* ------Generate Google Ads Refresh Token Function---------*/
@@ -106,18 +103,20 @@ const createServer = async () => {
     socket.on("bulk-domain-volume", (domain) => {
       BulkDomainVolume(socket, domain);
     });
-    socket.on("bulk-whois", ({ domain }) => BulkWhois(socket, domain));
+    socket.on("bulk-whois", ({ domain }) =>
+      BulkWhois(socket, domain),
+    );
     socket.on("namecheap-dropcatch", (domain) =>
-      NameCheapDropCatch(socket, domain)
+      NameCheapDropCatch(socket, domain),
     );
     socket.on("dynadot-dropcatch", (domain) =>
-      DynadotDropCatch(socket, domain)
+      DynadotDropCatch(socket, domain),
     );
     socket.on("namesilo-dropcatch", (domain) =>
-      NameSiloDropCatch(socket, domain)
+      NameSiloDropCatch(socket, domain),
     );
     socket.on("godaddy-dropcatch", (domain) =>
-      GodaddyDropCatch(socket, domain)
+      GodaddyDropCatch(socket, domain),
     );
     socket.on("developed-site-checker", ({ domain }) => {
       DevelopedSiteChecker(socket, domain);

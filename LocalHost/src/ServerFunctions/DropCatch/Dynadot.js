@@ -1,4 +1,4 @@
-const WhoisLight = require("whois-light");
+const WhoisLight = require("../../lib");
 const axios = require("axios");
 const { client } = require("../../../db");
 
@@ -14,14 +14,15 @@ async function DynadotDropCatch(socket, data) {
     for (const domain of domains) {
       axios
         .get(
-          `https://api.dynadot.com/api3.json?key=${api?.api}&command=register&domain=${domain}&duration=1&currency=USD`
+          `https://api.dynadot.com/api3.json?key=${api?.api}&command=register&domain=${domain}&duration=1&currency=USD`,
         )
         .then((res) => {
           socket.emit("dynadot-catched", {
             domain,
             status: res.data?.RegisterResponse?.Status,
             errorStatus: res.data?.RegisterResponse?.Status,
-            responseCode: res.data?.RegisterResponse?.ResponseCode,
+            responseCode:
+              res.data?.RegisterResponse?.ResponseCode,
           });
         })
         .catch((err) => console.log(err));
@@ -30,7 +31,9 @@ async function DynadotDropCatch(socket, data) {
     for (const domain of domains) {
       WhoisLight.lookup({ format: true }, domain)
         .then((res) => {
-          if (domain.toLowerCase().includes(".uk" || ".co.uk")) {
+          if (
+            domain.toLowerCase().includes(".uk" || ".co.uk")
+          ) {
             const raw = res._raw
               .split("\r\n")
               .map((x) => x.split("\n"))

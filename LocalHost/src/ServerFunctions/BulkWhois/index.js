@@ -1,4 +1,5 @@
-const WhoisLight = require("whois-light");
+const WhoisLight = require("../../lib");
+
 function BulkWhois(socket, domain) {
   try {
     WhoisLight.lookup({ format: true }, domain)

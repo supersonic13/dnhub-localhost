@@ -1,11 +1,14 @@
-const WhoisLight = require("whois-light");
+const WhoisLight = require("../../../lib");
 const { connectToMongoDB } = require("../../../../db");
 const dayjs = require("dayjs");
 
 async function whois(domain) {
   try {
     const { db } = await connectToMongoDB();
-    const res = await WhoisLight.lookup({ format: true }, domain);
+    const res = await WhoisLight.lookup(
+      { format: true },
+      domain,
+    );
 
     // Consolidate possible indicators of registration
     const isRegistered = [
@@ -20,20 +23,23 @@ async function whois(domain) {
       res?.["created............"],
     ].some(Boolean);
 
-    const hasActiveStatus = ["connect", "ok", "active"].includes(
-      res?.Status?.toLowerCase()
-    );
+    const hasActiveStatus = [
+      "connect",
+      "ok",
+      "active",
+    ].includes(res?.Status?.toLowerCase());
 
     const isAvailable =
-      res?.["registration status"]?.toLowerCase() === "available" ||
+      res?.["registration status"]?.toLowerCase() ===
+        "available" ||
       (!isRegistered && !hasActiveStatus);
 
     const availability =
       isRegistered || hasActiveStatus
         ? "registered"
         : isAvailable
-        ? "available"
-        : "unknown";
+          ? "available"
+          : "unknown";
 
     // Save whois to database
     await db.collection("domains-whois").insertOne({

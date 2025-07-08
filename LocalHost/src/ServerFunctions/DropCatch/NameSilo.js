@@ -1,4 +1,4 @@
-const WhoisLight = require("whois-light");
+const WhoisLight = require("../../lib");
 const axios = require("axios");
 const { client } = require("../../../db");
 
@@ -13,13 +13,15 @@ async function NameSiloDropCatch(socket, data) {
     for (const domain of domains) {
       axios
         .get(
-          `https://www.namesilo.com/api/registerDomain?version=1&type=json&key=${api?.api}&domain=${domain}&years=1&private=1&auto_renew=0`
+          `https://www.namesilo.com/api/registerDomain?version=1&type=json&key=${api?.api}&domain=${domain}&years=1&private=1&auto_renew=0`,
         )
         .then((res) => {
           socket.emit("namesilo-catched", {
             domain,
             status:
-              res.data?.reply?.detail !== "success" ? "Failed" : "Success",
+              res.data?.reply?.detail !== "success"
+                ? "Failed"
+                : "Success",
             errorStatus: res.data?.reply?.detail,
             responseCode: res.data?.reply?.code,
           });
@@ -30,7 +32,9 @@ async function NameSiloDropCatch(socket, data) {
     for (const domain of domains) {
       WhoisLight.lookup({ format: true }, domain)
         .then((res) => {
-          if (domain.toLowerCase().includes(".uk" || ".co.uk")) {
+          if (
+            domain.toLowerCase().includes(".uk" || ".co.uk")
+          ) {
             const raw = res._raw
               .split("\r\n")
               .map((x) => x.split("\n"))

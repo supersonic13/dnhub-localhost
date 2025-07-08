@@ -1,4 +1,10 @@
-import { Button, Chip, Divider, Input, Spacer } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Divider,
+  Input,
+  Spacer,
+} from "@nextui-org/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,7 +29,9 @@ export default function DynadotApi() {
       .catch((err) => {
         setLoading(false);
         console.log(err);
-        toast.error("Some Error Occurred", { position: "bottom-right" });
+        toast.error("Some Error Occurred", {
+          position: "bottom-right",
+        });
       });
   };
 
@@ -46,12 +54,8 @@ export default function DynadotApi() {
 
       <Divider />
       <Spacer y={2} />
-      <Chip variant="flat" radius="sm" color={"secondary"}>
-        If you disable, premium domains will not shown. Please refer to the
-        documentation on how to get Sedo API for free.
-      </Chip>
-      <div>
-        <Spacer y={2} />
+
+      <div className="sm:w-[50%]">
         <Input
           value={api}
           onChange={(e) => setApi(e.target.value)}
