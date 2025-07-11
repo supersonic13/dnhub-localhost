@@ -19,7 +19,12 @@ export default async function handler(req, res) {
         res.json(captures);
     }
   } catch (error) {
-    console.error("Error fetching keyword ideas:", error);
+    console.error(
+      "Error in getting Archive Data:",
+      error?.response?.data ||
+        error.request?.data ||
+        error?.response,
+    );
     res.json("error");
   }
 }

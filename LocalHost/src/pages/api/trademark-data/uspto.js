@@ -11,7 +11,8 @@ export default async function handler(req, res) {
       "Content-Type": "application/json",
       Origin: "https://tmsearch.uspto.gov",
       Pragma: "no-cache",
-      Referer: "https://tmsearch.uspto.gov/search/search-results",
+      Referer:
+        "https://tmsearch.uspto.gov/search/search-results",
       "Sec-CH-UA":
         '"Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"',
       "Sec-CH-UA-Mobile": "?0",
@@ -172,19 +173,24 @@ export default async function handler(req, res) {
         },
         {
           headers,
-        }
+        },
       );
 
       return res.status(200).json(response.data); // Send the response
     } catch (error) {
-      console.error("Error ", error);
+      // console.error("Error ", error);
       return res
         .status(500)
-        .json({ error: "An error occurred while processing the request" });
+        .json({
+          error:
+            "An error occurred while processing the request",
+        });
     }
   } else {
     // Handle unsupported HTTP methods
-    return res.status(405).json({ error: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ error: "Method not allowed" });
   }
 }
 

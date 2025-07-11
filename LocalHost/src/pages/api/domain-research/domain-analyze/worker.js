@@ -17,7 +17,7 @@ const its = nlp.its;
   chunk.forEach((domain) => {
     const domainName = domain?.toLowerCase();
     const dn = domainName?.split(".")?.[0];
-    const words = WordsNinja.splitSentence(dn, { capitalizeFirstLetter: true });
+    const words = WordsNinja.splitSentence(dn);
 
     allWords.push(...words);
 
@@ -63,7 +63,14 @@ const its = nlp.its;
   for (const word of allWords) {
     wordFreq[word] = (wordFreq[word] || 0) + 1;
   }
-  const wordsCount = Object.entries(wordFreq).sort((a, b) => b[1] - a[1]);
+  const wordsCount = Object.entries(wordFreq).sort(
+    (a, b) => b[1] - a[1],
+  );
 
-  parentPort.postMessage({ allDomains, allWords, wordsCount, allPos }); // Send the results to the main thread
+  parentPort.postMessage({
+    allDomains,
+    allWords,
+    wordsCount,
+    allPos,
+  }); // Send the results to the main thread
 })();
