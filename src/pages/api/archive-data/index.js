@@ -1,0 +1,36 @@
+const axios = require("axios");
+export default async function handler(req, res) {
+  const domain = req.body?.domain;
+
+  try {
+    switch (req.method) {
+      case "POST":
+        const captures = await axios
+          .get(`http://web.archive.org/cdx/search/cdx`, {
+            params: {
+              url: domain,
+              output: "json",
+              limit: 1,
+              sort: "asc",
+            },
+          })
+          .then((res) => res.data);
+
+        res.json(captures);
+    }
+  } catch (error) {
+    console.error(
+      "Error in getting Archive Data:",
+      error?.response?.data ||
+        error.request?.data ||
+        error?.response,
+    );
+    res.json("error");
+  }
+}
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};

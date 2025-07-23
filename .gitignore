@@ -2,22 +2,19 @@
 
 # dependencies
 /node_modules
-node_modules/
 /.pnp
 .pnp.js
 
 # testing
 /coverage
-
+/.zip
+/.zip/
 # next.js
 /.next/
-.next/
 /out/
-/.parcel-cache/
-.parcel-cache/
-/uploads/
-uploads/
-/uploads
+
+
+
 # production
 /build
 
@@ -32,7 +29,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env
 .env*.local
 
 # vercel
@@ -41,6 +37,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Local Netlify folder
-.netlify
+/.github/

@@ -1,9 +1,50 @@
 {
+  "name": "localhost-server",
+  "version": "1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node start.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node start.js",
+    "lint": "next lint"
+  },
   "dependencies": {
+    "@nextui-org/react": "^2.4.7",
+    "@reduxjs/toolkit": "^1.9.5",
+    "adm-zip": "^0.5.16",
+    "axios": "^1.5.0",
+    "cheerio": "^1.0.0-rc.12",
+    "clsx": "^2.0.0",
     "cors": "^2.8.5",
+    "csv-parse": "^5.6.0",
+    "dayjs": "^1.11.10",
+    "dns2": "^2.1.0",
+    "express": "^4.18.2",
+    "framer-motion": "^12.23.0",
+    "google-trends-api": "^4.9.2",
+    "mongodb": "^6.0.0",
+    "multer": "^1.4.5-lts.1",
+    "next": "^14.1.0",
+    "next-auth": "^4.24.11",
+    "preline": "^1.9.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-redux": "^8.1.2",
     "soap": "^1.1.4",
-    "wink-eng-lite-web-model": "^1.8.0",
-    "wink-nlp": "^2.3.0",
+    "socket.io": "^4.7.5",
+    "uuid": "^9.0.1",
+    "whois-light": "^1.1.7",
+    "wink-eng-lite-web-model": "^1.8.1",
+    "wink-nlp": "^2.3.2",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "autoprefixer": "^10.4.15",
+    "eslint": "8.23.1",
+    "eslint-config-next": "13.4.19",
+    "postcss": "^8.4.28",
+    "tailwindcss": "^3.3.3"
   }
 }
