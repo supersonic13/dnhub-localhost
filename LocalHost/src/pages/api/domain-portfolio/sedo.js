@@ -1,4 +1,4 @@
-import { client } from "../../../db";
+import { connectToMongoDb } from "../../../../db";
 import soap from "soap";
 const sedoUrl = "https://api.sedo.com/api/v1/?wsdl";
 const args = {
@@ -10,6 +10,7 @@ const args = {
 };
 
 async function SedoDomainList(req, res) {
+  const { db } = await connectToMongoDb();
   try {
     soap.createClient(sedoUrl, function (err, clients) {
       clients?.DomainList(
@@ -40,8 +41,7 @@ async function SedoDomainList(req, res) {
               upsert: true,
             },
           }));
-          await client
-            .db("localhost-server")
+          await db
             .collection("sedo-domains")
             .bulkWrite(bulkOps);
         },

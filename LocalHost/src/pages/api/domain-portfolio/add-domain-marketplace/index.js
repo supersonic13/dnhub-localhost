@@ -1,4 +1,4 @@
-import { client } from "../../../../db";
+import { connectToMongoDb } from "../../../../../db";
 import sedo from "./sedo";
 export default async function AddDomainMarketPlace(req, res) {
   const {
@@ -9,11 +9,11 @@ export default async function AddDomainMarketPlace(req, res) {
     floorPrice,
     register,
   } = req.body;
+  const { db } = await connectToMongoDb();
   try {
     switch (req.method) {
       case "POST":
-        const results = await client
-          .db("localhost-server")
+        const results = await db
           .collection("all-domains")
           .updateOne(
             { domain },
