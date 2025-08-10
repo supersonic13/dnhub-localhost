@@ -44,7 +44,23 @@ export default async function bulkDomainVolume(req, respond) {
       "Error fetching keyword ideas:",
       JSON.stringify(error?.response?.data),
     );
-    // res.json("error");
+    if (error?.response?.data?.error === "invalid_grant") {
+      return res.status(400).json({
+        error:
+          error?.response?.data?.error_description ||
+          "Refresh token expired",
+        details:
+          "Please login again on your https://localhost:5000",
+      });
+    } else if (
+      error?.response?.data?.error?.status === "UNAUTHENTICATED"
+    ) {
+      return res.status(401).json({
+        error: "Access token expired",
+        details:
+          "Please re-generate access token on your https://localhost:5000",
+      });
+    }
   }
 }
 export const config = {

@@ -41,7 +41,7 @@ export default async function bulkDomainVolume(req, res) {
         const data = response?.data?.results?.map((x) => ({
           domain: domains.find(
             (y) =>
-              x.text?.split(" ").join("") ===
+              x?.text?.split(" ").join("") ===
               y
                 ?.split("-")
                 .join("")
@@ -61,14 +61,25 @@ export default async function bulkDomainVolume(req, res) {
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
-      error?.response || error,
+      JSON.stringify(error?.response?.data),
     );
-    return res
-      .status(500)
-      .json({
-        error: "Error fetching keyword ideas",
-        details: error?.message,
+    if (error?.response?.data?.error === "invalid_grant") {
+      return res.status(400).json({
+        error:
+          error?.response?.data?.error_description ||
+          "Refresh token expired",
+        details:
+          "Please login again on your https://localhost:5000",
       });
+    } else if (
+      error?.response?.data?.error?.status === "UNAUTHENTICATED"
+    ) {
+      return res.status(401).json({
+        error: "Access token expired",
+        details:
+          "Please re-generate access token on your https://localhost:5000",
+      });
+    }
   }
 }
 

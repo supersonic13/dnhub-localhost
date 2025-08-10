@@ -1,9 +1,7 @@
-const Home = ({ data, themes, affiliateLink }) => {
+export default function Home() {
   return (
     <>
       <p>Please configure your APIs</p>
     </>
   );
-};
-
-export default Home;
+}

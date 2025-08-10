@@ -1,5 +1,5 @@
-const { nextui } = require("@nextui-org/react");
-const plugin = require("preline/plugin");
+import { heroui } from "@heroui/react";
+// const plugin = require("preline/plugin");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,12 +9,12 @@ module.exports = {
 
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
     "node_modules/preline/dist/*.js",
   ],
   theme: {
     extend: {},
   },
   darkMode: "class",
-  plugins: [nextui(), require("preline/plugin")],
+  plugins: [heroui(), require("preline/plugin")],
 };

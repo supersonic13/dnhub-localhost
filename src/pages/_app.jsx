@@ -1,6 +1,6 @@
 import "../styles/scrollbar.css";
 import "../styles/globals.css";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "../Redux/store";
@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <NextUIProvider>
+    <HeroUIProvider>
       <Provider store={store}>
         <Head>
           <link
@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </Layout>
       </Provider>
-    </NextUIProvider>
+    </HeroUIProvider>
   );
 }
 

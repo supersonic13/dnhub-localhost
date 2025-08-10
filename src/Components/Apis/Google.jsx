@@ -6,7 +6,7 @@ import {
   Link,
   Spacer,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

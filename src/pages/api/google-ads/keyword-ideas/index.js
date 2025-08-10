@@ -7,12 +7,10 @@ export default async function handler(req, res) {
   const keywords = req.body?.keywords;
 
   if (!api) {
-    return res
-      .status(500)
-      .json({
-        status: false,
-        message: "Google API credentials not found.",
-      });
+    return res.status(500).json({
+      status: false,
+      message: "Google API credentials not found.",
+    });
   }
 
   try {
@@ -50,24 +48,33 @@ export default async function handler(req, res) {
       }
 
       default:
-        return res
-          .status(405)
-          .json({
-            status: false,
-            message: "Method not allowed",
-          });
+        return res.status(405).json({
+          status: false,
+          message: "Method not allowed",
+        });
     }
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
       JSON.stringify(error?.response?.data || error),
     );
-    return res
-      .status(500)
-      .json({
-        status: false,
-        message: "Error fetching keyword ideas.",
+    if (error?.response?.data?.error === "invalid_grant") {
+      return res.status(400).json({
+        error:
+          error?.response?.data?.error_description ||
+          "Refresh token expired",
+        details:
+          "Please login again on your https://localhost:5000",
       });
+    } else if (
+      error?.response?.data?.error?.status === "UNAUTHENTICATED"
+    ) {
+      return res.status(401).json({
+        error: "Access token expired",
+        details:
+          "Please re-generate access token on your https://localhost:5000",
+      });
+    }
   }
 }
 

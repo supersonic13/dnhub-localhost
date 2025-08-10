@@ -24,14 +24,16 @@ export default async function handler(req, res) {
             "developer-token": api?.devToken,
             "Content-Type": "application/json",
           },
-        }
+        },
       )
       .then((res) => res?.data);
 
     const data = response?.results?.map((x) => ({
       domain: x.text
         ?.split(" ")
-        ?.map((z) => z.slice(0, 1).toUpperCase().concat(z.slice(1)))
+        ?.map((z) =>
+          z.slice(0, 1).toUpperCase().concat(z.slice(1)),
+        )
         ?.join(""),
       keyword: x?.text,
       keywordMetrics: x?.keywordMetrics || {
@@ -44,12 +46,25 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
-      JSON.stringify(error?.response?.data)
+      JSON.stringify(error?.response?.data),
     );
-    return res.status(500).json({
-      error: "Error fetching keyword ideas",
-      details: error?.response?.data || error.message,
-    });
+    if (error?.response?.data?.error === "invalid_grant") {
+      return res.status(400).json({
+        error:
+          error?.response?.data?.error_description ||
+          "Refresh token expired",
+        details:
+          "Please login again on your https://localhost:5000",
+      });
+    } else if (
+      error?.response?.data?.error?.status === "UNAUTHENTICATED"
+    ) {
+      return res.status(401).json({
+        error: "Access token expired",
+        details:
+          "Please re-generate access token on your https://localhost:5000",
+      });
+    }
   }
 }
 export const config = {
