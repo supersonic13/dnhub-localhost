@@ -3,7 +3,7 @@ export default function Toggle() {
     <>
       <div className="-mt-px">
         {/* Breadcrumb */}
-        <div className="sticky top-0 inset-x-0 z-20 bg-white bg-red-500 border-y px-4 sm:px-6 lg:px-8 lg:hidden">
+        <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 lg:hidden">
           <div className="flex items-center py-2">
             {/* Navigation Toggle */}
             <button
@@ -28,7 +28,13 @@ export default function Toggle() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <rect width={18} height={18} x={3} y={3} rx={2} />
+                <rect
+                  width={18}
+                  height={18}
+                  x={3}
+                  y={3}
+                  rx={2}
+                />
                 <path d="M15 3v18" />
                 <path d="m8 9 3 3-3 3" />
               </svg>

@@ -34,6 +34,7 @@
     "soap": "^1.1.4",
     "socket.io": "^4.7.5",
     "uuid": "^9.0.1",
+    "whois-json": "^2.0.4",
     "whois-light": "^1.1.7",
     "wink-eng-lite-web-model": "^1.8.1",
     "wink-nlp": "^2.3.2",

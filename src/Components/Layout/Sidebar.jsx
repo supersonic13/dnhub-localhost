@@ -20,7 +20,7 @@ export default function Sidebar() {
         <div className="relative flex flex-col h-full max-h-full">
           <div className="px-6 pt-4">
             {/* Logo */}
-            <Image alt="logo" src="/images/logo.png" />
+            <Image alt="logo" src="/images/dnhub2.png" />
             {/* End Logo */}
           </div>
           {/* Content */}

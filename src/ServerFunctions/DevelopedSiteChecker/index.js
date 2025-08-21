@@ -44,34 +44,38 @@ const placeholderPatterns = [
   "sedoparking.com", // sedo parking
   'window.location.href="/lander"', // afternic redirect
   "html data-adblockkey=", // parking sites network solitions
+  "register.com",
+  "nginx",
 ];
 
 async function DevelopedSiteChecker(socket, domain) {
-  const whois = await WhoisLight.lookup(
-    { format: true },
-    domain,
-  ).then((res) => {
-    if (domain.toLowerCase().includes(".uk" || ".co.uk")) {
-      const raw = res._raw
-        .split("\r\n")
-        .map((x) => x.split("\n"))
-        .join(":")
-        .split(":")
-        .map((x) => x.trim())
-        .filter((x) => x);
-      const chunkSize = 2;
-      let obj = {};
-      let arr = [];
-      for (let i = 0; i < raw.length; i += chunkSize) {
-        const chunk = raw.slice(i, i + chunkSize);
-        arr.push(chunk);
+  const whois = await WhoisLight.lookup({ format: true }, domain).then(
+    (res) => {
+      if (
+        domain.toLowerCase().includes(".uk") ||
+        domain.toLowerCase()?.includes(".co.uk")
+      ) {
+        const raw = res._raw
+          .split("\r\n")
+          .map((x) => x.split("\n"))
+          .join(":")
+          .split(":")
+          .map((x) => x.trim())
+          .filter((x) => x);
+        const chunkSize = 2;
+        let obj = {};
+        let arr = [];
+        for (let i = 0; i < raw.length; i += chunkSize) {
+          const chunk = raw.slice(i, i + chunkSize);
+          arr.push(chunk);
+        }
+        arr.map((x) => (obj[x[0]] = x[1]));
+        return obj;
+      } else {
+        return res;
       }
-      arr.map((x) => (obj[x[0]] = x[1]));
-      return obj;
-    } else {
-      return res;
     }
-  });
+  );
   try {
     const response = await axios.get(`http://${domain}`, {
       headers: {
@@ -84,15 +88,14 @@ async function DevelopedSiteChecker(socket, domain) {
       const content = response.data?.toLowerCase();
 
       const isPlaceHolder = placeholderPatterns.some((x) =>
-        content.includes(x),
+        content.includes(x?.toLowerCase(s))
       );
       if (isPlaceHolder) {
         // Domain Not Developed
         socket.emit("developed-site-checker", {
           domain,
           age:
-            whois?.["Creation Date"]?.slice(0, 10) ||
-            whois?.["Registered on"],
+            whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
           registrar: whois?.Registrar || "-",
           registeredOn:
             whois?.["Creation Date"]?.slice(0, 10) ||
@@ -111,8 +114,7 @@ async function DevelopedSiteChecker(socket, domain) {
         socket.emit("developed-site-checker", {
           domain,
           age:
-            whois?.["Creation Date"]?.slice(0, 10) ||
-            whois?.["Registered on"],
+            whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
           registrar: whois?.Registrar || "-",
           registeredOn:
             whois?.["Creation Date"]?.slice(0, 10) ||
@@ -131,9 +133,7 @@ async function DevelopedSiteChecker(socket, domain) {
       // Domain Not Developed
       socket.emit("developed-site-checker", {
         domain,
-        age:
-          whois?.["Creation Date"]?.slice(0, 10) ||
-          whois?.["Registered on"],
+        age: whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
         registrar: whois?.Registrar || "-",
         registeredOn:
           whois?.["Creation Date"]?.slice(0, 10) ||
@@ -152,9 +152,7 @@ async function DevelopedSiteChecker(socket, domain) {
     // Domain Error or not Found
     socket.emit("developed-site-checker", {
       domain,
-      age:
-        whois?.["Creation Date"]?.slice(0, 10) ||
-        whois?.["Registered on"],
+      age: whois?.["Creation Date"]?.slice(0, 10) || whois?.["Registered on"],
       registrar: whois?.Registrar || "-",
       registeredOn:
         whois?.["Creation Date"]?.slice(0, 10) ||
@@ -166,8 +164,7 @@ async function DevelopedSiteChecker(socket, domain) {
         "-",
       isDeveloped: false,
       status: err?.response?.status || err?.code,
-      statusText:
-        err?.response?.statusText || "Domain Not Found",
+      statusText: err?.response?.statusText || "Domain Not Found",
     });
   }
 }

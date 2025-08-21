@@ -16,12 +16,17 @@ function MyApp({ Component, pageProps }) {
     <HeroUIProvider>
       <Provider store={store}>
         <Head>
-          <link
+          <title>dnhub.io Local Host Server</title>
+          <meta
+            name="description"
+            content="dnhub.io local host server"
+          />
+          {/* <link
             rel="icon"
             type="image/png"
             sizes="32x32"
             href="/images/logo/logo/logo2.png"
-          />
+          />*/}
         </Head>
         <Layout>
           <Component {...pageProps} />
