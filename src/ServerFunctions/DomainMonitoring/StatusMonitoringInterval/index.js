@@ -7,7 +7,7 @@ async function StatusMonitoringInterval() {
 
     await processDomains(domains);
 
-    console.log("Waiting for next 10-second interval...");
+    // console.log("Waiting for next 10-second interval...");
     setTimeout(runInterval, 10000);
   }
 

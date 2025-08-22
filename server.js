@@ -58,24 +58,16 @@ const createServer = async () => {
   );
 
   /* ------Price Monitoring Function---------*/
-  // PriceMonitoringInterval();
+  PriceMonitoringInterval();
   /* ------Price Monitoring Function---------*/
 
   /* ------Dns Monitoring Function---------*/
-  // DnsMonitoringInterval();
+  StatusMonitoringInterval();
   /* ------Dns Monitoring Function---------*/
 
-  /* ------Dns Monitoring Function---------*/
-  // AvailableMonitoringInterval();
-  /* ------Dns Monitoring Function---------*/
-
-  /* ------Dns Monitoring Function---------*/
-  // StatusMonitoringInterval();
-  /* ------Dns Monitoring Function---------*/
-
-  /* ------Dns Monitoring Function---------*/
-  // AutoCatchInterval();
-  /* ------Dns Monitoring Function---------*/
+  /* ------Auto DropCatch Function---------*/
+  AutoCatchInterval();
+  /* ------Auto DropCatch Function---------*/
 
   /* ------Generate Google Ads Refresh Token Function---------*/
   GenerateToken();
@@ -131,6 +123,10 @@ const createServer = async () => {
     GodaddyAuctionBidding(socket);
     ManualBidding(socket);
     MultiBidding(socket);
+
+    socket.on("disconnect", () => {
+      console.log("A user disconnected");
+    });
   });
 
   server.all("*", (req, res) => {

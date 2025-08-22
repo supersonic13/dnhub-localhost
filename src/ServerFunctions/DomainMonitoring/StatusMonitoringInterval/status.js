@@ -65,7 +65,6 @@ async function statusMonitoring(domain) {
                     ? "The domain expiry date changed"
                     : "The domain status changed";
 
-    // Collect changed fields for $set and $push
     let updateSet = {};
     let updatePush = {};
     let changes = [];
@@ -82,25 +81,19 @@ async function statusMonitoring(domain) {
         : newValue !== oldValue;
 
       if (isChanged) {
-        console.log("some domain changed", newValue, oldValue);
-        // Prepare $set and $push updates for this key
         updateSet[`${key}.value`] = newValue;
         updatePush[`${key}.history`] = {
           date: Date.now(),
           status: newValue,
         };
 
-        // record changed field for notification
         changes.push({
           key,
           message: keyCheck(key),
         });
-      } else {
-        console.log("no domain changed");
       }
     }
 
-    // Send notifications for changed fields (if any)
     for (const ch of changes) {
       await db.collection("notifications").insertOne({
         notificationName: "status monitoring",

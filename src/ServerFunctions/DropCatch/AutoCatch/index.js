@@ -8,7 +8,6 @@ async function AutoCatchInterval() {
       await ProcessDomains(domains?.domains);
     }
 
-    // console.log("Waiting for next 1 minute interval...");
     setTimeout(runInterval, 5000);
   }
 
