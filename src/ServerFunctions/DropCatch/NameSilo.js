@@ -1,15 +1,11 @@
+const dayjs = require("dayjs");
 const WhoisLight = require("../../lib");
 const axios = require("axios");
-const { client } = require("../../../db");
 
 async function NameSiloDropCatch(socket, data) {
   // console.time("drop-catch");
-  const { domains } = data;
+  const { domains, api } = data;
   try {
-    const api = await client
-      .db("localhost-server")
-      .collection("namesilo-api")
-      .findOne({});
     for (const domain of domains) {
       axios
         .get(
@@ -24,9 +20,18 @@ async function NameSiloDropCatch(socket, data) {
                 : "Success",
             errorStatus: res.data?.reply?.detail,
             responseCode: res.data?.reply?.code,
+            time: dayjs().format("HH:mm:ss.SSS"),
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          socket.emit("namesilo-catched", {
+            domain,
+            status: "Failed",
+            errorStatus: err.message,
+            responseCode: err.response?.status,
+            time: dayjs().format("HH:mm:ss.SSS"),
+          });
+        });
     }
 
     for (const domain of domains) {

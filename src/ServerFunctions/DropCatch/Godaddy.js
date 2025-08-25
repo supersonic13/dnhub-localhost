@@ -1,110 +1,126 @@
+const dayjs = require("dayjs");
 const WhoisLight = require("../../lib");
 const axios = require("axios");
-const { client } = require("../../../db");
 
 async function GodaddyDropCatch(socket, data) {
-  // console.time("drop-catch");
-  const { domains } = data;
-  //`sso-key 3mM44UbgSaTnZa_k8GxyWC81cL93ub4i1FzV:UoKmqiHd1myEoSpqgC8rAQ`,
+  const {
+    domains,
+    api: {
+      api,
+      secret,
+      firstName,
+      lastName,
+      middleName,
+      address1,
+      address2,
+      city,
+      country,
+      postalCode,
+      state,
+      email,
+      org,
+      phone,
+      ns1,
+      ns2,
+    },
+  } = data;
 
   try {
-    const api = await client
-      .db("localhost-server")
-      .collection("godaddy-api")
-      .findOne({});
-
     const headers = {
-      Authorization: `sso-key ${api?.api}:${api?.secret}`,
+      Authorization: `sso-key ${api}:${secret}`,
     };
-
+    const now = new Date();
+    const isoDate = now.toISOString();
+    const isoDateWithoutMilliseconds =
+      isoDate.split(".")[0] + "Z";
     for (const domain of domains) {
       const body = {
         consent: {
-          agreedAt: "2024-08-22T14:30:15Z",
-          agreedBy: "irfan",
+          agreedAt: isoDateWithoutMilliseconds,
+          agreedBy: firstName,
           agreementKeys: ["DNRA"],
         },
         contactAdmin: {
           addressMailing: {
-            address1: "dsadsf",
-            address2: "strisdfsdfng",
-            city: "WestBengal",
-            country: "IN",
-            postalCode: "766565",
-            state: "West Bengal",
+            address1: address1,
+            address2: address2,
+            city: city,
+            country,
+            postalCode: postalCode,
+            state: state,
           },
-          email: "user@exampddle.com",
-          fax: "+44.123 456 789",
-          jobTitle: "strfsdfdsing",
-          nameFirst: "psk",
-          nameLast: "rpo",
-          nameMiddle: "find",
-          organization: "nothing",
-          phone: "+44.123 456 789",
+          email: email,
+          fax: phone,
+          jobTitle: "Investor",
+          nameFirst: firstName,
+          nameLast: lastName,
+          nameMiddle: middleName,
+          organization: org,
+          phone: phone,
         },
         contactBilling: {
           addressMailing: {
-            address1: "dsadsf",
-            address2: "strisdfsdfng",
-            city: "WestBengal",
-            country: "IN",
-            postalCode: "766565",
-            state: "West Bengal",
+            address1: address1,
+            address2: address2,
+            city: city,
+            country,
+            postalCode: postalCode,
+            state,
           },
-          email: "user@exampddle.com",
-          fax: "+44.123 456 789",
-          jobTitle: "strfsdfdsing",
-          nameFirst: "psk",
-          nameLast: "rpo",
-          nameMiddle: "find",
-          organization: "nothing",
-          phone: "+44.123 456 789",
+          email,
+          fax: phone,
+          jobTitle: "Investor",
+          nameFirst: firstName,
+          nameLast: lastName,
+          nameMiddle: middleName,
+          organization: org,
+          phone: phone,
         },
         contactRegistrant: {
           addressMailing: {
-            address1: "dsadsf",
-            address2: "strisdfsdfng",
-            city: "WestBengal",
-            country: "IN",
-            postalCode: "766565",
-            state: "West Bengal",
+            address1: address1,
+            address2: address2,
+            city: city,
+            country,
+            postalCode: postalCode,
+            state,
           },
-          email: "user@exampddle.com",
-          fax: "+44.123 456 789",
-          jobTitle: "strfsdfdsing",
-          nameFirst: "psk",
-          nameLast: "rpo",
-          nameMiddle: "find",
-          organization: "nothing",
-          phone: "+44.123 456 789",
+          email,
+          fax: phone,
+          jobTitle: "Investor",
+          nameFirst: firstName,
+          nameLast: lastName,
+          nameMiddle: middleName,
+          organization: org,
+          phone: phone,
         },
         contactTech: {
           addressMailing: {
-            address1: "dsadsf",
-            address2: "strisdfsdfng",
-            city: "WestBengal",
-            country: "IN",
-            postalCode: "766565",
-            state: "West Bengal",
+            address1: address1,
+            address2: address2,
+            city: city,
+            country,
+            postalCode: postalCode,
+            state,
           },
-          email: "user@exampddle.com",
-          fax: "+44.123 456 789",
-          jobTitle: "strfsdfdsing",
-          nameFirst: "psk",
-          nameLast: "rpo",
-          nameMiddle: "find",
-          organization: "nothing",
-          phone: "+44.123 456 789",
+          email,
+          fax: phone,
+          jobTitle: "Investor",
+          nameFirst: firstName,
+          nameLast: lastName,
+          nameMiddle: middleName,
+          organization: org,
+          phone: phone,
         },
         domain: domain,
-        nameServers: ["dsfsdf.ns.com", "asdf.ns.com"],
+        nameServers: [ns1, ns2],
         period: 1,
         privacy: false,
         renewAuto: true,
       };
       axios
         .post(
-          `https://api.ote-godaddy.com/v1/domains/purchase`,
+          `https://api.godaddy.com/v1/domains/purchase`,
           body,
           {
             headers,
@@ -116,16 +132,18 @@ async function GodaddyDropCatch(socket, data) {
             status: res.data?.code || "success",
             errorStatus: res.data?.message || "",
             responseCode: res.data?.itemCount,
+            time: dayjs().format("HH:mm:ss.SSS"),
           });
         })
         .catch((err) => {
-          console.log("error", err?.response?.data);
+          // console.log("some error", err);
           socket.emit("godaddy-catched", {
             domain,
             status: err?.response?.data?.code || "success",
             errorStatus:
               err?.response?.data?.message || "success",
             responseCode: err?.response?.data?.itemCount,
+            time: dayjs().format("HH:mm:ss.SSS"),
           });
         });
     }
@@ -154,14 +172,14 @@ async function GodaddyDropCatch(socket, data) {
             socket.emit("godaddy-dropcatch", obj);
             // respond.json(obj);
           } else {
+            // console.log(res);
             socket.emit("godaddy-dropcatch", res);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err);
     }
   } catch (err) {
-    console.log(err);
+    // console.log("some error occurred");
   }
 }
-
 module.exports = GodaddyDropCatch;

@@ -1,38 +1,48 @@
 const WhoisLight = require("../../lib");
 const axios = require("axios");
-const { client } = require("../../../db");
+const dayjs = require("dayjs");
 
 async function DynadotDropCatch(socket, data) {
-  // console.time("drop-catch");
-  // 9F8y639W7M6P8l7chFy8sLy6y7f7CE9G8AY9UQE
-  const { domains } = data;
+  const { domains, api } = data;
+
   try {
-    const api = await client
-      .db("localhost-server")
-      .collection("dynadot-api")
-      .findOne({});
     for (const domain of domains) {
-      axios
-        .get(
+      try {
+        const response = await axios.get(
           `https://api.dynadot.com/api3.json?key=${api?.api}&command=register&domain=${domain}&duration=1&currency=USD`,
-        )
-        .then((res) => {
-          socket.emit("dynadot-catched", {
+        );
+
+        socket.emit("dynadot-catched", {
+          domain:
+            response?.data?.RegisterResponse?.DomainName ||
             domain,
-            status: res.data?.RegisterResponse?.Status,
-            errorStatus: res.data?.RegisterResponse?.Status,
-            responseCode:
-              res.data?.RegisterResponse?.ResponseCode,
-          });
-        })
-        .catch((err) => console.log(err));
+          status:
+            response?.data?.RegisterResponse?.Status || "error",
+          errorStatus:
+            response?.data?.RegisterResponse?.Error ||
+            response?.data?.Response?.Error,
+          responseCode:
+            response?.data?.RegisterResponse?.ResponseCode ||
+            response?.data?.Response?.ResponseCode,
+          time: dayjs().format("HH:mm:ss.SSS"),
+        });
+      } catch (err) {
+        socket.emit("dynadot-catched", {
+          domain,
+          status: "error",
+          errorStatus: err?.message,
+          responseCode: err?.errno,
+          time: dayjs().format("HH:mm:ss.SSS"),
+        });
+      }
     }
 
     for (const domain of domains) {
       WhoisLight.lookup({ format: true }, domain)
         .then((res) => {
           if (
-            domain.toLowerCase().includes(".uk" || ".co.uk")
+            domain.toLowerCase().includes(".uk") ||
+            domain.toLowerCase().includes(".co.uk")
           ) {
             const raw = res._raw
               .split("\r\n")

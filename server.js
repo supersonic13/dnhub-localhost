@@ -70,7 +70,7 @@ const createServer = async () => {
   /* ------Auto DropCatch Function---------*/
 
   /* ------Generate Google Ads Refresh Token Function---------*/
-  GenerateToken();
+  // GenerateToken();
   /* ------Generate Google Ads Refresh Token Function---------*/
 
   io.on("connection", (socket) => {

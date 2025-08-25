@@ -55,7 +55,7 @@ export default async function bulkDomainVolume(req, res) {
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
-      error?.response?.data || error.message,
+      JSON.stringify(error?.response?.data || error.message),
     );
     if (error?.response?.data?.error === "invalid_grant") {
       return res.status(400).json({

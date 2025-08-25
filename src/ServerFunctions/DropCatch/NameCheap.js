@@ -1,44 +1,62 @@
 const WhoisLight = require("../../lib");
 const axios = require("axios");
+const dayjs = require("dayjs");
 const xml2js = require("xml2js");
-const { client } = require("../../../db");
 const parser = new xml2js.Parser();
+
 async function NameCheapDropCatch(socket, data) {
-  // console.time("drop-catch");
-  // c2a4b598e31f416a99e6fb9181fbd2cf
-  const { domains } = data;
   try {
-    const api = await client
-      .db("localhost-server")
-      .collection("namecheap-api")
-      .findOne({});
+    const {
+      domains,
+      api: {
+        api,
+        userName,
+        clientIp,
+        firstName,
+        lastName,
+        address1,
+        city,
+        country,
+        postalCode,
+        state,
+        email,
+        org,
+        phone,
+      },
+    } = data;
+
     for (const domain of domains) {
       axios
         .get(
-          `https://api.sandbox.namecheap.com/xml.response?ApiUser=neelhabib&ApiKey=${api?.api}&UserName=${api?.userName}&Command=namecheap.domains.create&ClientIp=223.237.79.248&DomainName=${domain}&Years=1&AuxBillingFirstName=John&AuxBillingLastName=Smith&AuxBillingAddress1=8939%20S.cross%20Blv&AuxBillingStateProvince=CA&AuxBillingPostalCode=90045&AuxBillingCountry=US&AuxBillingPhone=+1.6613102107&AuxBillingEmailAddress=john@gmail.com&AuxBillingOrganizationName=NC&AuxBillingCity=CA&TechFirstName=John&TechLastName=Smith&TechAddress1=8939%20S.cross%20Blvd&TechStateProvince=CA&TechPostalCode=90045&TechCountry=US&TechPhone=+1.6613102107&TechEmailAddress=john@gmail.com&TechOrganizationName=NC&TechCity=CA&AdminFirstName=John&AdminLastName=Smith&AdminAddress1=8939%cross%20Blvd&AdminStateProvince=CA&AdminPostalCode=9004&AdminCountry=US&AdminPhone=+1.6613102107&AdminEmailAddress=joe@gmail.com&AdminOrganizationName=NC&AdminCity=CA&RegistrantFirstName=John&RegistrantLastName=Smith&RegistrantAddress1=8939%20S.cross%20Blvd&RegistrantStateProvince=CS&RegistrantPostalCode=90045&RegistrantCountry=US&RegistrantPhone=+1.6613102107&RegistrantEmailAddress=jo@gmail.com&RegistrantOrganizationName=NC&RegistrantCity=CA&AddFreeWhoisguard=no&WGEnabled=no&GenerateAdminOrderRefId=False&IsPremiumDomain=False&PremiumPrice=0&EapFee=0`,
+          `https://api.namecheap.com/xml.response?ApiUser=${userName}&ApiKey=${api}&UserName=${userName}&Command=namecheap.domains.create&ClientIp=${clientIp}&DomainName=${domain}&Years=1&AuxBillingFirstName=${firstName}&AuxBillingLastName=${lastName}&AuxBillingAddress1=${address1}&AuxBillingStateProvince=${state}&AuxBillingPostalCode=${postalCode}&AuxBillingCountry=${country}&AuxBillingPhone=${phone}&AuxBillingEmailAddress=${email}&AuxBillingOrganizationName=${org}&AuxBillingCity=${city}&TechFirstName=${firstName}&TechLastName=${lastName}&TechAddress1=${address1}&TechStateProvince=${state}&TechPostalCode=${postalCode}&TechCountry=${country}&TechPhone=${phone}&TechEmailAddress=${email}&TechOrganizationName=${org}&TechCity=${city}&AdminFirstName=${firstName}&AdminLastName=${lastName}&AdminAddress1=${address1}&AdminStateProvince=${state}&AdminPostalCode=${postalCode}&AdminCountry=${country}&AdminPhone=${phone}&AdminEmailAddress=${email}&AdminOrganizationName=${org}&AdminCity=${city}&RegistrantFirstName=${firstName}&RegistrantLastName=${lastName}&RegistrantAddress1=${address1}&RegistrantStateProvince=${state}&RegistrantPostalCode=${postalCode}&RegistrantCountry=${country}&RegistrantPhone=${phone}&RegistrantEmailAddress=${email}&RegistrantOrganizationName=${org}&RegistrantCity=${city}&AddFreeWhoisguard=no&WGEnabled=no&GenerateAdminOrderRefId=False&IsPremiumDomain=False&PremiumPrice=0&EapFee=0`,
         )
         .then((res) => {
           parser.parseString(res.data, (err, json) => {
-            err && console.log(err);
+            // err && console.log(err);
             socket.emit("namecheap-catched", {
               domain,
-              status: json?.ApiResponse?.$?.Status,
+              status:
+                json?.ApiResponse?.$?.Status === "OK"
+                  ? "success"
+                  : json?.ApiResponse?.$?.Status,
               errorStatus:
                 json?.ApiResponse?.Errors?.[0]?.Error?.[0]?._,
               responseCode:
                 json?.ApiResponse?.Errors?.[0]?.Error?.[0]?.$
                   ?.Number,
+              time: dayjs().format("HH:mm:ss.SSS"),
             });
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err);
     }
 
     for (const domain of domains) {
       WhoisLight.lookup({ format: true }, domain)
         .then((res) => {
           if (
-            domain.toLowerCase().includes(".uk" || ".co.uk")
+            domain.toLowerCase().includes(".uk") ||
+            domain.toLowerCase().includes(".co.uk")
           ) {
             const raw = res._raw
               .split("\r\n")
@@ -61,10 +79,10 @@ async function NameCheapDropCatch(socket, data) {
             socket.emit("namecheap-dropcatch", res);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err);
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 

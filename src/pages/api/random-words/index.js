@@ -64,6 +64,12 @@ export default async function handler(req, res) {
         details:
           "Please re-generate access token on your https://localhost:5000",
       });
+    } else {
+      return res.status(401).json({
+        error: "Some error occurred.",
+        details:
+          "Some error occurred. Please try again after few minutes.",
+      });
     }
   }
 }

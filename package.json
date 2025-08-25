@@ -33,6 +33,7 @@
     "react-redux": "^8.1.2",
     "soap": "^1.1.4",
     "socket.io": "^4.7.5",
+    "tldts": "^7.0.12",
     "uuid": "^9.0.1",
     "whois-json": "^2.0.4",
     "whois-light": "^1.1.7",
