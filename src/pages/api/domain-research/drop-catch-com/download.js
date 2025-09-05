@@ -20,7 +20,10 @@ export async function downloadAndProcessCSV(url) {
     });
 
     // Save the stream to a file
-    await streamPipeline(response.data, createWriteStream(tempPath));
+    await streamPipeline(
+      response.data,
+      createWriteStream(tempPath),
+    );
 
     // Find the header line number
     const fileStream = fs.createReadStream(tempPath);
@@ -55,7 +58,7 @@ export async function downloadAndProcessCSV(url) {
             columns: true,
             skip_empty_lines: true,
             from_line: headerLine,
-          })
+          }),
         )
         .on("data", (row) => records.push(row))
         .on("end", resolve)
@@ -75,7 +78,9 @@ export async function downloadAndProcessCSV(url) {
 export default async function handler(req, res) {
   const { client } = await connectToMongoDB();
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ message: "Method not allowed" });
   }
 
   try {
@@ -83,28 +88,29 @@ export default async function handler(req, res) {
     const collectionName = req.body?.value?.label;
     const data = await downloadAndProcessCSV(url);
 
-    await client
+    const deleteResult = await client
       .db("localhost-server")
       .collection(collectionName)
-      .deleteMany()
-      .then(() => console.log("deleted"))
-      .catch((err) => console.log(err));
+      .deleteMany({});
+    const deletedCount = deleteResult?.deletedCount ?? 0;
 
+    let insertedCount = 0;
     if (data.length > 0) {
-      await client
+      const insertResult = await client
         .db("localhost-server")
         .collection(collectionName)
-        .insertMany(data)
-        .then(() => {
-          console.log("completed");
-        })
-        .catch((err) => console.log(err));
+        .insertMany(data);
+      insertedCount = insertResult?.insertedCount ?? 0;
     }
 
-    return res.status(200).json(data);
+    return res
+      .status(200)
+      .json({ status: true, deletedCount, insertedCount });
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ message: "Internal server error" });
   }
 }
 

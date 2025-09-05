@@ -21,7 +21,10 @@ export async function downloadAndProcessZip(url) {
     const tempPath = "/tmp/download.zip";
 
     // Save the stream to a file
-    await streamPipeline(response.data, createWriteStream(tempPath));
+    await streamPipeline(
+      response.data,
+      createWriteStream(tempPath),
+    );
 
     // Read and process the ZIP file
     const zip = new AdmZip(tempPath);
@@ -53,33 +56,38 @@ export async function downloadAndProcessZip(url) {
 export default async function handler(req, res) {
   const { client } = await connectToMongoDB();
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
+    return res
+      .status(405)
+      .json({ message: "Method not allowed" });
   }
 
   try {
     const url = req.body?.value?.value;
     const data = await downloadAndProcessZip(url);
 
-    await client
+    const deleteResult = await client
       .db("localhost-server")
       .collection(req?.body?.value?.label)
-      .deleteMany()
-      .then((res) => console.log("deleted"))
-      .catch((err) => console.log(err));
+      .deleteMany({});
+    const deletedCount = deleteResult?.deletedCount ?? 0;
 
-    await client
-      .db("localhost-server")
-      .collection(req?.body?.value?.label)
-      .insertMany(data?.[0]?.data)
-      .then((res) => {
-        console.log("completed");
-      })
-      .catch((err) => console.log(err));
+    let insertedCount = 0;
+    if (data.length > 0) {
+      const insertResult = await client
+        .db("localhost-server")
+        .collection(req?.body?.value?.label)
+        .insertMany(data?.[0]?.data);
+      insertedCount = insertResult?.insertedCount ?? 0;
+    }
 
-    return res.status(200).json(data);
+    return res
+      .status(200)
+      .json({ status: true, deletedCount, insertedCount });
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ message: "Internal server error" });
   }
 }
 export const config = {

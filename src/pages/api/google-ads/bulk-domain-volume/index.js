@@ -28,7 +28,10 @@ export default async function bulkDomainVolume(req, res) {
 
         const response = await axios.post(
           apiUrl,
-          { keywords: allWords },
+          {
+            keywords: allWords,
+            keywordPlanNetwork: "GOOGLE_SEARCH",
+          },
           {
             headers: {
               Authorization: `Bearer ${api?.accessToken}`,

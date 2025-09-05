@@ -87,6 +87,7 @@ export default async function handler(req, res) {
           apiUrl,
           {
             keywords,
+            keywordPlanNetwork: "GOOGLE_SEARCH",
             historicalMetricsOptions: {
               includeAverageCpc: true,
             },

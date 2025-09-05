@@ -130,8 +130,10 @@ export default async function handler(req, res) {
             const keywordVol = await axios
               .post(
                 apiUrl,
+
                 {
                   keywords,
+                  keywordPlanNetwork: "GOOGLE_SEARCH",
                   historicalMetricsOptions: {
                     includeAverageCpc: true,
                   },

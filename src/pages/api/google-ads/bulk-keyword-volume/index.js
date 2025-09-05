@@ -16,6 +16,7 @@ export default async function bulkDomainVolume(req, respond) {
             apiUrl,
             {
               keywords: [...keywords],
+              keywordPlanNetwork: "GOOGLE_SEARCH",
             },
 
             {

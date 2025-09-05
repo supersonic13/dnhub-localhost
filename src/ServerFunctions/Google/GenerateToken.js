@@ -32,7 +32,7 @@ async function refreshToken() {
     if (result.modifiedCount > 0 || result.upsertedCount > 0) {
       console.log({
         status: true,
-        message: "Updated successfully",
+        message: "Google Ads Access Token updated successfully",
       });
     } else {
       console.log({
@@ -42,10 +42,17 @@ async function refreshToken() {
       });
     }
   } catch (err) {
-    console.error(err);
+    // console.error(err?.response?.data);
     console.log({
       status: false,
       message: "Failed to update access token.",
+      reason: err?.response?.data?.error,
+      description: err?.response?.data?.error_description,
+      action:
+        err?.response?.data?.error_description?.toLowerCase() ===
+        "token has been expired or revoked."
+          ? "Refresh Token Expired. Please connect google ads account again to generate Refresh Token."
+          : "Some error occured. Please try again",
     });
   }
 }
