@@ -4,30 +4,29 @@ import { connectToMongoDB } from "../../../../../db";
 export default async function bulkDomainVolume(req, respond) {
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
-  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
+  const apiUrl = `https://googleads.googleapis.com/v21/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
 
   const keywords = req?.body?.keywords;
 
   try {
     switch (req.method) {
       case "POST":
-        const response = await axios
-          .post(
-            apiUrl,
-            {
-              keywords: [...keywords],
-              keywordPlanNetwork: "GOOGLE_SEARCH",
-            },
+        const response = await axios.post(
+          apiUrl,
+          {
+            keywords: [...keywords],
+            keywordPlanNetwork: "GOOGLE_SEARCH",
+          },
 
-            {
-              headers: {
-                Authorization: `Bearer ${api?.accessToken}`,
-                "developer-token": api?.devToken,
-                "Content-Type": "application/json",
-              },
+          {
+            headers: {
+              Authorization: `Bearer ${api?.accessToken}`,
+              "developer-token": api?.devToken,
+              "Content-Type": "application/json",
             },
-          )
-          .then((res) => res?.data);
+          },
+        );
+
         // console.log(domains);
         const data = response?.results?.map((x) => ({
           keyword: x?.text,
@@ -37,7 +36,7 @@ export default async function bulkDomainVolume(req, respond) {
             competitionIndex: "0",
           },
         }));
-        respond.json(data);
+        return respond.json(data);
         break;
     }
   } catch (error) {
@@ -46,7 +45,7 @@ export default async function bulkDomainVolume(req, respond) {
       JSON.stringify(error?.response?.data),
     );
     if (error?.response?.data?.error === "invalid_grant") {
-      return res.status(400).json({
+      return respond.status(400).json({
         error:
           error?.response?.data?.error_description ||
           "Refresh token expired",
@@ -56,7 +55,7 @@ export default async function bulkDomainVolume(req, respond) {
     } else if (
       error?.response?.data?.error?.status === "UNAUTHENTICATED"
     ) {
-      return res.status(401).json({
+      return respond.status(401).json({
         error: "Access token expired",
         details:
           "Please re-generate access token on your https://localhost:5000",

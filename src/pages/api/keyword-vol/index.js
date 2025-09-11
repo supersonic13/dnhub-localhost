@@ -5,7 +5,7 @@ const axios = require("axios");
 export default async function handler(req, res) {
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
-  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordIdeas`;
+  const apiUrl = `https://googleads.googleapis.com/v21/customers/${api?.customerId}:generateKeywordIdeas`;
 
   const keywords = req.body?.domain?.keywords;
   try {

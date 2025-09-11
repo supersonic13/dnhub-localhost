@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   console.time("completed in");
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
-  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
+  const apiUrl = `https://googleads.googleapis.com/v21/customers/${api?.customerId}:generateKeywordHistoricalMetrics`;
   try {
     upload.single("file")(req, res, async (err) => {
       if (err) {

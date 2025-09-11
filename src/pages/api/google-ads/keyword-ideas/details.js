@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   try {
     switch (req.method) {
       case "POST": {
-        const apiUrl = `https://googleads.googleapis.com/v19/customers/${api.customerId}:generateKeywordIdeas`;
+        const apiUrl = `https://googleads.googleapis.com/v21/customers/${api.customerId}:generateKeywordIdeas`;
 
         const currentDate = dayjs();
         const startYear = currentDate.year() - 5 + 1; // last five years including current year

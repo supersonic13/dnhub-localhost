@@ -53,13 +53,22 @@ export default async function handler(req, res) {
 
       let headerLine = 0;
       let foundHeader = false;
-
+      function normalizeHeader(line) {
+        return line
+          .trim()
+          .replace(/^"+|"+$/g, "") // remove surrounding quotes
+          .replace(/","/g, ","); // replace "," with ,
+        // .toLowerCase();
+      }
       for await (const line of rl) {
         headerLine++;
+        const normalized = normalizeHeader(line);
         if (
-          line.trim().startsWith("Domain,") ||
-          line.trim().startsWith("Domain name,") ||
-          line.trim().startsWith("Domain Name,")
+          normalized.startsWith("Domain,") ||
+          normalized.startsWith("DomainName,") ||
+          normalized.startsWith("Domainname,") ||
+          normalized.startsWith("Domain Name,") ||
+          normalized.startsWith("Domain name,")
         ) {
           foundHeader = true;
           break;
@@ -68,7 +77,9 @@ export default async function handler(req, res) {
       rl.close();
 
       if (!foundHeader)
-        throw new Error("CSV header not found!");
+        console.log(
+          "CSV domain and price header not found! please make sure the header is 'domain,price'",
+        );
 
       // Parse CSV file from the header line
       const rows = [];
@@ -76,16 +87,26 @@ export default async function handler(req, res) {
         fs.createReadStream(tempPath)
           .pipe(
             parse({
-              columns: true,
+              columns: (header) =>
+                header.map((name) =>
+                  name
+                    .replace(/^"+|"+$/g, "") // remove quotes
+                    .trim()
+                    // .toLowerCase()
+                    .replace(/\s+/g, ""),
+                ),
               skip_empty_lines: true,
+              relax_column_count: true,
+              relax_quotes: true,
               from_line: headerLine,
-              relax_column_count: true, // <-- Add this line
+              bom: true, // <-- THIS removes the BOM automatically
             }),
           )
           .on("data", (row) => rows.push(row))
           .on("end", resolve)
           .on("error", reject);
       });
+
       if (rows.length === 0) {
         return res.json({
           wordsCount: {},

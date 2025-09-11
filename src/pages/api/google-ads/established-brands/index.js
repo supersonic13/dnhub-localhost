@@ -3,9 +3,7 @@ import { connectToMongoDB } from "../../../../../db.js";
 
 export default async function bulkDomainVolume(req, res) {
   if (req.method !== "POST") {
-    return res
-      .status(405)
-      .json({ error: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
   const { db } = await connectToMongoDB();
   const api = await db.collection("google-api").findOne();
@@ -16,7 +14,7 @@ export default async function bulkDomainVolume(req, res) {
   }
 
   const [keyword1, keyword2] = keyword.split(" ");
-  const apiUrl = `https://googleads.googleapis.com/v18/customers/${api?.customerId}:suggestBrands`;
+  const apiUrl = `https://googleads.googleapis.com/v21/customers/${api?.customerId}:suggestBrands`;
 
   try {
     const headers = {
@@ -38,11 +36,7 @@ export default async function bulkDomainVolume(req, res) {
 
       keyword2
         ? axios
-            .post(
-              apiUrl,
-              { brandPrefix: keyword2 },
-              { headers },
-            )
+            .post(apiUrl, { brandPrefix: keyword2 }, { headers })
             .then((res) => res?.data)
         : Promise.resolve(null),
     ]);
@@ -55,19 +49,15 @@ export default async function bulkDomainVolume(req, res) {
   } catch (error) {
     console.error(
       "Error fetching keyword ideas:",
-      JSON.stringify(error?.response?.data || error.message),
+      JSON.stringify(error?.response?.data || error.message)
     );
     if (error?.response?.data?.error === "invalid_grant") {
       return res.status(400).json({
         error:
-          error?.response?.data?.error_description ||
-          "Refresh token expired",
-        details:
-          "Please login again on your https://localhost:5000",
+          error?.response?.data?.error_description || "Refresh token expired",
+        details: "Please login again on your https://localhost:5000",
       });
-    } else if (
-      error?.response?.data?.error?.status === "UNAUTHENTICATED"
-    ) {
+    } else if (error?.response?.data?.error?.status === "UNAUTHENTICATED") {
       return res.status(401).json({
         error: "Access token expired",
         details:

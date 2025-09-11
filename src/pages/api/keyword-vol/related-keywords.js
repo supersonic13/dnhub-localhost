@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const api = await db.collection("google-api").findOne();
   const { keyword } = req.body;
 
-  const apiUrl = `https://googleads.googleapis.com/v19/customers/${api?.customerId}:generateKeywordIdeas`;
+  const apiUrl = `https://googleads.googleapis.com/v21/customers/${api?.customerId}:generateKeywordIdeas`;
 
   try {
     switch (req.method) {

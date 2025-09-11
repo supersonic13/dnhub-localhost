@@ -15,7 +15,35 @@ const its = nlp.its;
   const allWords = [];
   const allPos = [];
   chunk.forEach((domain) => {
-    const domainName = domain?.Domain?.toLowerCase();
+    const domainFields = [
+      "Domain",
+      "DomainName",
+      "Domainname",
+      "Domain Name",
+      "Domain name",
+    ];
+    const priceFields = [
+      "Price",
+      "Prices",
+      "price",
+      "prices",
+      "pricing",
+      "Pricing",
+    ];
+    let domainName = domainFields
+      .map((field) => domain?.[field])
+      .find(
+        (value) => typeof value === "string" && value.length,
+      )
+      ?.toLowerCase();
+    let domainPrice = priceFields
+      .map((field) => domain?.[field])
+      .find(
+        (value) => typeof value === "string" && value.length,
+      )
+      ?.toLowerCase()
+      ?.replace(/[\$,]/g, "");
+
     const dn = domainName?.split(".")?.[0];
     const words = WordsNinja.splitSentence(dn);
 
@@ -31,6 +59,7 @@ const its = nlp.its;
 
     allDomains.push({
       domain: domainName,
+      price: domainPrice,
       keyword: dn,
       tld: domainName?.split(".")?.slice(1).join("."),
       onlyWord: /^[a-zA-Z]+$/.test(dn),
@@ -40,24 +69,10 @@ const its = nlp.its;
       splittedWords: words,
       wordsCount: words.length,
       length: dn?.length,
-      // auctionEndTime: domain?.auctionEndTime,
       auctionType: domain?.Type,
-      // domainAge: domain?.domainAge,
-      // isAdult: domain?.isAdult,
-      // link: domain?.link,
-      // monthlyParkingRevenue: domain?.monthlyParkingRevenue,
-      // numberOfBids: domain?.Bidders,
-      // seller: domain?.Seller,
-      // currentBid: domain?.["Current bid"],
-      // valuation: domain?.valuation,
       pos,
     });
   });
-  // const doc = nlp.readDoc(allWords.join(" "));
-  // const wordsCount = doc
-  //   .tokens()
-  //   .filter((t) => t.out(its.type) === "word")
-  //   .out(its.value, as.freqTable);
 
   const wordFreq = {};
   for (const word of allWords) {
