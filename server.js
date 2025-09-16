@@ -2,7 +2,7 @@ const express = require("express");
 const next = require("next");
 const http = require("http"); // Required for socket.io integration
 const { Server } = require("socket.io");
-const port = parseInt(process.env.PORT, 10) || 5000;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
